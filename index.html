@@ -1,1 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vspo! Schedule</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>🎮 Vspo! Schedule</h1>
+    <div class="lang-switch">
+      <button onclick="setLang('ja')" id="btn-ja">日本語</button>
+      <button onclick="setLang('en')" id="btn-en">English</button>
+    </div>
+  </header>
 
+  <main>
+    <section id="schedule-section">
+      <h2 class="section-title" data-ja="配信スケジュール" data-en="Stream Schedule">配信スケジュール</h2>
+      <div id="schedule-container">
+        <!-- Makeから書き込まれたデータがここに表示される -->
+        <p class="loading" data-ja="データを読み込み中..." data-en="Loading...">データを読み込み中...</p>
+      </div>
+    </section>
+
+    <section id="members-section">
+      <h2 class="section-title" data-ja="メンバー" data-en="Members">メンバー</h2>
+      <div id="members-container"></div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
