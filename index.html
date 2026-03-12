@@ -177,6 +177,10 @@ section { margin-bottom:32px; }
 }
 .member-card.active .member-avatar, .member-card:hover .member-avatar { border-color:var(--member-color,var(--accent)); }
 .member-avatar img { width:100%; height:100%; object-fit:cover; }
+.member-avatar[data-fallback='true']::after {
+  content: attr(data-ini);
+  font-size:1.1rem; font-weight:700; color:var(--member-color,var(--accent));
+}
 .member-name { font-size:.68rem; font-weight:700; color:var(--text); line-height:1.2; word-break:break-all; }
 .live-badge {
   position:absolute; top:5px; right:5px;
@@ -664,10 +668,27 @@ async function fetchStats() {
 async function fetchMemberIcons() {
   try {
     const r = await fetch('members.json?t='+Date.now());
+    if(!r.ok) { console.warn('members.json が見つかりません（status:', r.status, '）'); MEMBER_ICONS={}; return; }
     const d = await r.json();
     MEMBER_ICONS = {};
-    d.forEach(m => { if(m.iconUrl) MEMBER_ICONS[m.id] = m.iconUrl; });
-  } catch(e) { MEMBER_ICONS = {}; }
+    // 配列形式: [{id, iconUrl, ...}]
+    if(Array.isArray(d)){
+      d.forEach(m => { if(m.iconUrl) MEMBER_ICONS[m.id] = m.iconUrl; });
+    }
+    // オブジェクト形式: {id: iconUrl} の場合も対応
+    else if(typeof d === 'object'){
+      Object.entries(d).forEach(([id, val]) => {
+        if(typeof val === 'string') MEMBER_ICONS[id] = val;
+        else if(val && val.iconUrl) MEMBER_ICONS[id] = val.iconUrl;
+      });
+    }
+    const loaded = Object.keys(MEMBER_ICONS).length;
+    console.log(`アイコン読み込み完了: ${loaded}人分`);
+    if(loaded === 0) console.warn('members.jsonは存在しますがアイコンURLが取得できませんでした。GASのupdateMemberIcons()を実行してください。');
+  } catch(e) {
+    console.warn('members.json の読み込みエラー:', e);
+    MEMBER_ICONS = {};
+  }
 }
 async function fetchSubscribers() {
   try {
@@ -755,7 +776,7 @@ function renderMembers() {
     return `<div class="member-card ${isAct?'active':''}" style="--member-color:${m.color}" onclick="filterMember('${m.id}')">
       ${isLive ? '<div class="live-badge">LIVE</div>' : ''}
       <div class="member-avatar">
-        ${icon ? `<img src="${icon}" alt="${name}" onerror="this.style.display='none'">` : `<span>${ini}</span>`}
+        ${icon ? `<img src="${icon}" alt="${name}" referrerpolicy="no-referrer" onerror="this.style.display='none';this.parentNode.dataset.fallback='true'">` : `<span>${ini}</span>`}
       </div>
       <div class="member-name">${name}</div>
     </div>`;
@@ -814,7 +835,7 @@ function renderSchedule() {
     const icon=MEMBER_ICONS[m.id]||''; const ini=(m.nameJa||name).slice(0,1);
     return `<a class="schedule-card ${s.isLive?'is-live':''}" href="${url}" target="_blank" rel="noopener" style="--card-color:${m.color}">
       <div class="card-avatar">
-        ${icon?`<img src="${icon}" alt="${name}" onerror="this.style.display='none'">`:`<span>${ini}</span>`}
+        ${icon?`<img src="${icon}" alt="${name}" referrerpolicy="no-referrer" onerror="this.style.display='none';this.parentNode.dataset.fallback='true'">`:`<span>${ini}</span>`}
       </div>
       <div class="card-info">
         <div class="card-member">${name}<span class="platform-badge ${bcls}">${plabel}</span>${dur?`<span style="font-size:.65rem;color:#9ca3af">⏱${dur}</span>`:''}</div>
@@ -857,7 +878,7 @@ function renderStatsMemberTabs(){
     const icon=MEMBER_ICONS[m.id]||''; const ini=m.nameJa.slice(0,1);
     return `<button class="smt-btn ${statsMemberId===m.id?'active':''}" onclick="selectStatsMember('${m.id}')" style="${statsMemberId===m.id?`background:${m.color};border-color:${m.color};`:''}">
       <div class="smt-avatar">
-        ${icon?`<img src="${icon}" alt="${name}" onerror="this.style.display='none'">`:`<span>${ini}</span>`}
+        ${icon?`<img src="${icon}" alt="${name}" referrerpolicy="no-referrer" onerror="this.style.display='none';this.parentNode.dataset.fallback='true'">`:`<span>${ini}</span>`}
       </div>${name}
     </button>`;
   }).join('');
@@ -896,21 +917,40 @@ function getStreamsForMonth(year,month,memberId){
   const key=`${year}-${String(month+1).padStart(2,'0')}`;
   const daysInMonth=new Date(year,month+1,0).getDate();
   let streams=[];
+
   if(STATS[key]){
     const src=memberId?{[memberId]:STATS[key][memberId]}:STATS[key];
     Object.entries(src||{}).forEach(([mid,data])=>{
       if(!data) return;
-      for(let i=0;i<(data.count||0);i++){
-        streams.push({memberId:mid,durationMin:Math.round((data.totalMins||0)/(data.count||1)),
-          platform:((data.youtubeMins||0)>=(data.twitchMins||0)?'youtube':'twitch'),
-          day:Math.min(i+1,daysInMonth)});
+      if(Array.isArray(data.streams)&&data.streams.length>0){
+        // 詳細streams配列あり（新フォーマット）
+        data.streams.forEach(s=>{
+          streams.push({memberId:mid,durationMin:s.durationMin||0,platform:s.platform||'youtube',day:s.day||1});
+        });
+      } else {
+        // 旧フォーマット互換：count/totalMinsから復元
+        const avgMin=Math.round((data.totalMins||0)/Math.max(data.count||1,1));
+        const plat=(data.youtubeMins||0)>=(data.twitchMins||0)?'youtube':'twitch';
+        for(let i=0;i<(data.count||0);i++){
+          streams.push({memberId:mid,durationMin:avgMin,platform:plat,day:Math.min(i+1,daysInMonth)});
+        }
       }
     });
-  } else {
+  }
+
+  // stats.jsonにデータがない場合、SCHEDULEから当月の過去分を補完
+  if(streams.length===0){
+    const now=new Date();
     streams=SCHEDULE.filter(s=>{
       const dt=new Date(s.datetime);
-      return dt.getFullYear()===year&&dt.getMonth()===month&&(!memberId||s.memberId===memberId);
-    }).map(s=>({memberId:s.memberId,durationMin:s.durationMin||120,platform:s.platform,day:new Date(s.datetime).getDate()}));
+      return dt.getFullYear()===year&&dt.getMonth()===month
+        &&dt<=now&&(!memberId||s.memberId===memberId);
+    }).map(s=>({
+      memberId:s.memberId,
+      durationMin:s.durationMin||0,
+      platform:s.platform||'youtube',
+      day:new Date(s.datetime).getDate()
+    }));
   }
   return streams;
 }
@@ -954,7 +994,7 @@ function renderStats(){
       const h=Math.floor(m.mins/60),mn=m.mins%60;
       return `<div class="rank-row">
         <div class="rank-num ${rankCls[i]||''}">${i+1}</div>
-        <div class="rank-avatar">${icon(m.id)?`<img src="${icon(m.id)}" onerror="this.style.display='none'">`:`<span>${m.nameJa.slice(0,1)}</span>`}</div>
+        <div class="rank-avatar">${icon(m.id)?`<img src="${icon(m.id)}" referrerpolicy="no-referrer" onerror="this.style.display='none';this.parentNode.dataset.fallback='true'">`:`<span>${m.nameJa.slice(0,1)}</span>`}</div>
         <div class="rank-name">${lang==='ja'?m.nameJa:m.nameEn}</div>
         <div class="rank-bar-wrap"><div class="rank-bar-bg">
           <div class="rank-bar-fill" style="width:${(m.mins/maxMins*100).toFixed(1)}%;--bar-color:${m.color}"></div>
@@ -966,7 +1006,7 @@ function renderStats(){
     document.getElementById('rankCount').innerHTML=[...byHours].sort((a,b)=>b.count-a.count).map((m,i)=>`
       <div class="rank-row">
         <div class="rank-num ${rankCls[i]||''}">${i+1}</div>
-        <div class="rank-avatar">${icon(m.id)?`<img src="${icon(m.id)}" onerror="this.style.display='none'">`:`<span>${m.nameJa.slice(0,1)}</span>`}</div>
+        <div class="rank-avatar">${icon(m.id)?`<img src="${icon(m.id)}" referrerpolicy="no-referrer" onerror="this.style.display='none';this.parentNode.dataset.fallback='true'">`:`<span>${m.nameJa.slice(0,1)}</span>`}</div>
         <div class="rank-name">${lang==='ja'?m.nameJa:m.nameEn}</div>
         <div class="rank-bar-wrap"><div class="rank-bar-bg">
           <div class="rank-bar-fill" style="width:${(m.count/maxCount*100).toFixed(1)}%;--bar-color:${m.color}"></div>
@@ -1019,7 +1059,7 @@ function renderMemberDetailPanel(memberId){
 
   const avEl=document.getElementById('mdpAvatar');
   avEl.style.setProperty('--member-color',m.color);
-  avEl.innerHTML=icon?`<img src="${icon}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" onerror="this.style.display='none'">`:`<span style="font-size:1.4rem;font-weight:900;color:${m.color}">${ini}</span>`;
+  avEl.innerHTML=icon?`<img src="${icon}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" referrerpolicy="no-referrer" onerror="this.style.display='none';this.parentNode.dataset.fallback='true'">`:`<span style="font-size:1.4rem;font-weight:900;color:${m.color}">${ini}</span>`;
 
   document.getElementById('mdpName').textContent=m.nameJa;
   document.getElementById('mdpEn').textContent=m.nameEn;
