@@ -1,32 +1,5 @@
 [
   {
-    "memberId": "toto",
-    "memberName": "小雀とと",
-    "title": "【 LoL 】えんてぃ先生に教えていただく会 #5【 ぶいすぽ / 小雀とと 】",
-    "platform": "youtube",
-    "url": "https://www.youtube.com/watch?v=IktIKLyFqSI",
-    "startedAt": "2026-03-12T07:04:44Z",
-    "isLive": true
-  },
-  {
-    "memberId": "noah",
-    "memberName": "胡桃のあ",
-    "title": "【 LOL 】はいがんばって/つな🐱【ぶいすぽっ！胡桃のあ】",
-    "platform": "youtube",
-    "url": "https://www.youtube.com/watch?v=dy1CBK52qRA",
-    "startedAt": "2026-03-12T04:08:00Z",
-    "isLive": true
-  },
-  {
-    "memberId": "sena",
-    "memberName": "空澄セナ",
-    "title": "【League of Legends】腹割りjg mid#VSPO_SHOWDOWN w/千燈ゆうひ【空澄セナ/ぶいすぽっ！】",
-    "platform": "youtube",
-    "url": "https://www.youtube.com/watch?v=oFmGsGBGSJQ",
-    "startedAt": "2026-03-12T06:36:51Z",
-    "isLive": true
-  },
-  {
     "memberId": "yuuhi",
     "memberName": "千燈ゆうひ",
     "title": "あほMIDとうんちJGによるノーマルduo練習",
@@ -34,6 +7,6 @@
     "url": "https://twitch.tv/sendo_yuuhi",
     "startedAt": "2026-03-12T06:38:20Z",
     "isLive": true,
-    "viewers": 2659
+    "viewers": 2240
   }
 ]
