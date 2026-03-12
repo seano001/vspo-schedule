@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vspo! Schedule</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=DM+Sans:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=DM+Sans:wght@600;700&display=swap" rel="stylesheet">
 <style>
 :root {
   --purple:    #7c3aed;
   --purple-lt: #ede9fe;
-  --purple-md: #ddd6fe;
+  --purple-md: #c4b5fd;
   --purple-dk: #5b21b6;
   --bg:        #faf9ff;
   --surface:   #ffffff;
@@ -17,15 +17,15 @@
   --text:      #1e1b2e;
   --muted:     #6b7280;
   --live:      #ef4444;
+  --r:         10px;
 }
-
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html { font-size: 15px; }
 body {
   font-family: 'Noto Sans JP', sans-serif;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
+  font-size: 14px;
 }
 
 /* ── LOADING ── */
@@ -34,241 +34,163 @@ body {
   background: var(--bg);
   display:flex; align-items:center; justify-content:center; flex-direction:column; gap:14px;
 }
-.spin {
-  width:36px; height:36px; border-radius:50%;
-  border:3px solid var(--purple-md);
-  border-top-color: var(--purple);
-  animation: spin .7s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
+.spin { width:34px; height:34px; border-radius:50%; border:3px solid var(--purple-md); border-top-color:var(--purple); animation:spin .7s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
 
 /* ── HEADER ── */
 header {
-  position: sticky; top: 0; z-index: 100;
-  background: rgba(255,255,255,.95);
-  backdrop-filter: blur(12px);
-  border-bottom: 1.5px solid var(--border);
-  padding: 0 16px;
-  height: 54px;
-  display: flex; align-items: center; justify-content: space-between;
+  position:sticky; top:0; z-index:100;
+  background:rgba(255,255,255,.96); backdrop-filter:blur(12px);
+  border-bottom:1.5px solid var(--border);
+  height:52px; padding:0 16px;
+  display:flex; align-items:center; justify-content:space-between;
 }
-.logo {
-  display: flex; align-items: center; gap: 9px;
-  font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 1.1rem;
-  color: var(--purple); letter-spacing: .02em;
-}
-.logo-dot {
-  width: 28px; height: 28px;
-  background: linear-gradient(135deg, var(--purple), #a78bfa);
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 14px;
-}
-.lang-row { display: flex; gap: 2px; }
-.lang-btn {
-  background: none; border: 1.5px solid var(--border);
-  color: var(--muted); font-size: .75rem; font-weight: 700;
-  padding: 4px 9px; border-radius: 6px; cursor: pointer;
-  transition: all .15s;
-}
-.lang-btn.on { background: var(--purple); border-color: var(--purple); color: #fff; }
+.logo { display:flex; align-items:center; gap:9px; font-family:'DM Sans',sans-serif; font-weight:700; font-size:1.05rem; color:var(--purple); }
+.logo-dot { width:28px; height:28px; background:linear-gradient(135deg,var(--purple),#a78bfa); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:14px; }
+.lang-row { display:flex; gap:3px; }
+.lang-btn { background:none; border:1.5px solid var(--border); color:var(--muted); font-size:.72rem; font-weight:700; padding:4px 9px; border-radius:6px; cursor:pointer; transition:all .15s; font-family:'DM Sans',sans-serif; }
+.lang-btn.on { background:var(--purple); border-color:var(--purple); color:#fff; }
 
 /* ── LIVE BAR ── */
-.live-bar {
-  display: none;
-  background: #fff5f5; border-bottom: 1.5px solid #fecaca;
-  padding: 7px 16px; align-items: center; gap: 10px;
-  overflow: hidden;
-}
-.live-bar.show { display: flex; }
-.live-pill {
-  flex-shrink: 0; background: var(--live); color: #fff;
-  font-size: .65rem; font-weight: 700; padding: 2px 7px;
-  border-radius: 99px; letter-spacing: .08em;
-  animation: blink 1.4s infinite;
-}
-@keyframes blink { 50% { opacity: .55; } }
-.live-names { display: flex; gap: 7px; overflow-x: auto; flex: 1; scrollbar-width: none; }
-.live-names::-webkit-scrollbar { display: none; }
-.live-chip {
-  flex-shrink: 0; display: flex; align-items: center; gap: 5px;
-  background: #fff; border: 1.5px solid #fecaca;
-  color: var(--live); font-size: .78rem; font-weight: 600;
-  padding: 3px 10px; border-radius: 99px;
-  text-decoration: none; transition: background .12s;
-}
-.live-chip:hover { background: #fff5f5; }
-.live-chip img {
-  width: 18px; height: 18px; border-radius: 50%; object-fit: cover;
-  border: 1px solid #fecaca;
-}
+.live-bar { display:none; background:#fff5f5; border-bottom:1.5px solid #fecaca; padding:7px 16px; align-items:center; gap:10px; }
+.live-bar.show { display:flex; }
+.live-pill { flex-shrink:0; background:var(--live); color:#fff; font-size:.62rem; font-weight:700; padding:2px 7px; border-radius:99px; letter-spacing:.08em; animation:blink 1.4s infinite; }
+@keyframes blink { 50%{opacity:.5} }
+.live-chips { display:flex; gap:7px; flex-wrap:wrap; flex:1; }
+.live-chip { display:flex; align-items:center; gap:5px; background:#fff; border:1.5px solid #fecaca; color:var(--live); font-size:.75rem; font-weight:600; padding:3px 10px; border-radius:99px; text-decoration:none; transition:background .12s; white-space:nowrap; }
+.live-chip:hover { background:#fff5f5; }
+.live-chip img { width:18px; height:18px; border-radius:50%; object-fit:cover; }
 
-/* ── MAIN LAYOUT ── */
-main { max-width: 800px; margin: 0 auto; padding: 20px 14px 100px; }
+/* ── MAIN ── */
+main { max-width:860px; margin:0 auto; padding:16px 14px 24px; }
 
-/* ── MEMBER STRIP ── */
-.members-row {
-  display: flex; gap: 8px; overflow-x: auto;
-  padding: 2px 0 10px; scrollbar-width: none; margin-bottom: 20px;
+/* ── MEMBER GRID ── */
+.section-label { font-size:.7rem; font-weight:700; color:var(--purple); letter-spacing:.12em; text-transform:uppercase; margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+.section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+.member-grid {
+  display:grid;
+  /* 25人を5列×5行で収める。画面幅に応じて自動調整 */
+  grid-template-columns: repeat(auto-fill, minmax(58px, 1fr));
+  gap:8px;
+  margin-bottom:18px;
 }
-.members-row::-webkit-scrollbar { display: none; }
-.m-chip {
-  flex-shrink: 0; display: flex; align-items: center; gap: 6px;
-  padding: 5px 11px 5px 5px;
-  background: var(--surface); border: 1.5px solid var(--border);
-  border-radius: 99px; cursor: pointer; transition: all .15s;
-  position: relative;
+.m-cell {
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+  padding:7px 3px; background:var(--surface); border:1.5px solid var(--border);
+  border-radius:var(--r); cursor:pointer; transition:all .15s;
+  position:relative; text-align:center;
 }
-.m-chip:hover { border-color: var(--member-color, var(--purple)); }
-.m-chip.on {
-  background: color-mix(in srgb, var(--member-color, var(--purple)) 10%, #fff);
-  border-color: var(--member-color, var(--purple));
+.m-cell:hover { border-color:var(--c,var(--purple)); box-shadow:0 0 0 3px color-mix(in srgb,var(--c,var(--purple)) 15%,transparent); }
+.m-cell.on { border-color:var(--c,var(--purple)); background:color-mix(in srgb,var(--c,var(--purple)) 9%,#fff); box-shadow:0 0 0 3px color-mix(in srgb,var(--c,var(--purple)) 18%,transparent); }
+.m-icon {
+  width:38px; height:38px; border-radius:50%; overflow:hidden;
+  background:color-mix(in srgb,var(--c,var(--purple)) 15%,#fff);
+  border:2px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  font-size:.95rem; font-weight:700; color:var(--c,var(--purple));
+  transition:border-color .15s; flex-shrink:0;
 }
-.m-chip img, .m-chip .m-ini {
-  width: 26px; height: 26px; border-radius: 50%; object-fit: cover;
-  border: 2px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  font-size: .75rem; font-weight: 700;
-  background: color-mix(in srgb, var(--member-color, var(--purple)) 18%, #fff);
-  color: var(--member-color, var(--purple));
+.m-cell.on .m-icon, .m-cell:hover .m-icon { border-color:var(--c,var(--purple)); }
+.m-icon img { width:100%; height:100%; object-fit:cover; display:block; }
+.m-name { font-size:.6rem; font-weight:700; color:var(--text); line-height:1.2; word-break:break-all; }
+.m-live-dot { position:absolute; top:4px; right:4px; width:7px; height:7px; border-radius:50%; background:var(--live); border:1.5px solid #fff; }
+.m-all-btn {
+  display:flex; align-items:center; justify-content:center; gap:4px;
+  padding:7px 3px; background:var(--purple-lt); border:1.5px solid var(--purple-md);
+  border-radius:var(--r); cursor:pointer; transition:all .15s; font-size:.6rem; font-weight:700; color:var(--purple);
 }
-.m-chip.on img, .m-chip.on .m-ini { border-color: var(--member-color, var(--purple)); }
-.m-chip-name { font-size: .75rem; font-weight: 700; color: var(--text); white-space: nowrap; }
-.m-live-dot {
-  position: absolute; top: 2px; right: 2px;
-  width: 8px; height: 8px; border-radius: 50%;
-  background: var(--live); border: 1.5px solid #fff;
-}
+.m-all-btn:hover, .m-all-btn.on { background:var(--purple); color:#fff; border-color:var(--purple); }
+.m-all-btn .m-icon { background:transparent; border:none; font-size:1rem; color:inherit; }
 
 /* ── DATE TABS ── */
 .date-tabs {
-  display: flex; gap: 6px; overflow-x: auto;
-  padding-bottom: 2px; scrollbar-width: none; margin-bottom: 16px;
+  display:grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap:5px;
+  margin-bottom:14px;
 }
-.date-tabs::-webkit-scrollbar { display: none; }
 .d-tab {
-  flex-shrink: 0; padding: 7px 13px; text-align: center;
-  background: var(--surface); border: 1.5px solid var(--border);
-  border-radius: 10px; cursor: pointer; transition: all .15s;
+  padding:7px 4px; text-align:center;
+  background:var(--surface); border:1.5px solid var(--border);
+  border-radius:var(--r); cursor:pointer; transition:all .14s;
 }
-.d-tab:hover { border-color: var(--purple); }
-.d-tab.on { background: var(--purple); border-color: var(--purple); color: #fff; }
-.d-tab .wd { font-size: .68rem; font-weight: 600; color: var(--muted); }
-.d-tab.on .wd { color: rgba(255,255,255,.75); }
-.d-tab .dd { font-size: .9rem; font-weight: 700; margin-top: 1px; }
+.d-tab:hover { border-color:var(--purple); }
+.d-tab.on { background:var(--purple); border-color:var(--purple); color:#fff; }
+.d-tab .wd { font-size:.62rem; font-weight:700; color:var(--muted); }
+.d-tab.on .wd { color:rgba(255,255,255,.75); }
+.d-tab .dd { font-size:.85rem; font-weight:700; margin-top:2px; }
+/* 土=青、日=赤 */
+.d-tab.sat .wd { color:#3b82f6; }
+.d-tab.sun .wd { color:var(--live); }
+.d-tab.on .wd { color:rgba(255,255,255,.75) !important; }
 
-/* ── FILTER STATUS ── */
-.filter-bar {
-  display: none; align-items: center; gap: 8px;
-  padding: 7px 12px; background: var(--purple-lt);
-  border-radius: 8px; margin-bottom: 12px;
-  font-size: .78rem; color: var(--purple-dk); font-weight: 600;
-}
-.filter-bar.show { display: flex; }
-.filter-bar button {
-  margin-left: auto; background: none; border: none;
-  color: var(--purple); cursor: pointer; font-size: .78rem; font-weight: 700;
-}
+/* ── FILTER BAR ── */
+.filter-bar { display:none; align-items:center; gap:8px; padding:7px 12px; background:var(--purple-lt); border-radius:8px; margin-bottom:10px; font-size:.78rem; color:var(--purple-dk); font-weight:600; }
+.filter-bar.show { display:flex; }
+.filter-bar button { margin-left:auto; background:none; border:none; color:var(--purple); cursor:pointer; font-size:.78rem; font-weight:700; padding:0; }
 
 /* ── SCHEDULE LIST ── */
-.schedule-list { display: flex; flex-direction: column; gap: 7px; }
-
+.schedule-list { display:flex; flex-direction:column; gap:7px; }
 .s-card {
-  display: flex; align-items: center; gap: 12px;
-  padding: 11px 14px;
-  background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-left: 3.5px solid var(--member-color, var(--purple));
-  border-radius: 10px;
-  text-decoration: none; color: inherit;
-  transition: all .14s;
+  display:flex; align-items:center; gap:11px; padding:11px 13px;
+  background:var(--surface); border:1.5px solid var(--border);
+  border-left:3.5px solid var(--c,var(--purple));
+  border-radius:var(--r); text-decoration:none; color:inherit;
+  transition:all .13s;
 }
-.s-card:hover { box-shadow: 0 2px 12px rgba(124,58,237,.1); transform: translateX(2px); }
-.s-card.is-live { background: linear-gradient(90deg, #fff5f5 0%, #fff 60%); border-left-color: var(--live); }
-
-.s-avatar {
-  width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0;
-  overflow: hidden; background: color-mix(in srgb, var(--member-color, var(--purple)) 14%, #fff);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1rem; font-weight: 700; color: var(--member-color, var(--purple));
-  border: 1.5px solid color-mix(in srgb, var(--member-color, var(--purple)) 30%, #fff);
-}
-.s-avatar img { width: 100%; height: 100%; object-fit: cover; }
-
-.s-body { flex: 1; min-width: 0; }
-.s-top { display: flex; align-items: center; gap: 7px; margin-bottom: 3px; flex-wrap: wrap; }
-.s-name { font-size: .8rem; font-weight: 700; color: var(--purple-dk); }
-.s-badge {
-  font-size: .62rem; font-weight: 700; padding: 2px 6px; border-radius: 5px;
-}
-.s-badge.yt     { background: #fee2e2; color: #b91c1c; }
-.s-badge.tw     { background: var(--purple-lt); color: var(--purple); }
-.s-badge.live   { background: var(--live); color: #fff; animation: blink 1.4s infinite; }
-.s-title { font-size: .82rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-.s-time { flex-shrink: 0; text-align: right; }
-.s-time .hm { font-family: 'DM Sans', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--purple); line-height: 1; }
-.s-time .dur { font-size: .65rem; color: var(--muted); margin-top: 2px; }
-
-/* ── EMPTY ── */
-.empty {
-  text-align: center; padding: 52px 16px; color: var(--muted);
-}
-.empty-icon { font-size: 2.2rem; margin-bottom: 10px; }
-.empty-text { font-size: .85rem; }
-
-/* ── BOTTOM NAV (mobile) ── */
-.bottom-nav {
-  display: none;
-  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
-  background: rgba(255,255,255,.97);
-  backdrop-filter: blur(12px);
-  border-top: 1.5px solid var(--border);
-  padding: 8px 0 max(8px, env(safe-area-inset-bottom));
-  justify-content: space-around;
-}
-.bn-btn {
-  display: flex; flex-direction: column; align-items: center; gap: 2px;
-  background: none; border: none; cursor: pointer;
-  color: var(--muted); font-size: .68rem; font-weight: 600;
-  padding: 4px 16px; transition: color .15s;
-}
-.bn-btn .ico { font-size: 1.35rem; }
-.bn-btn.on { color: var(--purple); }
+.s-card:hover { box-shadow:0 2px 12px rgba(124,58,237,.1); transform:translateX(2px); }
+.s-card.is-live { background:linear-gradient(90deg,#fff5f5 0%,#fff 60%); border-left-color:var(--live); }
+.s-avatar { width:40px; height:40px; border-radius:50%; flex-shrink:0; overflow:hidden; background:color-mix(in srgb,var(--c,var(--purple)) 14%,#fff); display:flex; align-items:center; justify-content:center; font-size:.95rem; font-weight:700; color:var(--c,var(--purple)); border:1.5px solid color-mix(in srgb,var(--c,var(--purple)) 28%,#fff); }
+.s-avatar img { width:100%; height:100%; object-fit:cover; }
+.s-body { flex:1; min-width:0; }
+.s-top { display:flex; align-items:center; gap:6px; margin-bottom:3px; flex-wrap:wrap; }
+.s-name { font-size:.78rem; font-weight:700; color:var(--purple-dk); }
+.badge { font-size:.6rem; font-weight:700; padding:2px 6px; border-radius:5px; }
+.badge.yt   { background:#fee2e2; color:#b91c1c; }
+.badge.tw   { background:var(--purple-lt); color:var(--purple); }
+.badge.live { background:var(--live); color:#fff; animation:blink 1.4s infinite; }
+.s-title { font-size:.8rem; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.s-time { flex-shrink:0; text-align:right; }
+.s-hm { font-family:'DM Sans',sans-serif; font-size:1.05rem; font-weight:700; color:var(--purple); line-height:1; }
+.s-dur { font-size:.62rem; color:var(--muted); margin-top:2px; }
+.empty { text-align:center; padding:48px 16px; color:var(--muted); }
+.empty-icon { font-size:2rem; margin-bottom:10px; }
 
 /* ── FOOTER ── */
-footer {
-  border-top: 1.5px solid var(--border);
-  padding: 14px 16px; text-align: center;
-  font-size: .72rem; color: var(--muted);
-  display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;
-}
-.upd-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #22c55e; vertical-align: middle; margin-right: 3px; }
+footer { border-top:1.5px solid var(--border); padding:14px 16px; text-align:center; font-size:.7rem; color:var(--muted); }
+.upd-dot { display:inline-block; width:6px; height:6px; border-radius:50%; background:#22c55e; vertical-align:middle; margin-right:3px; }
 
 /* ── RESPONSIVE ── */
-@media (max-width: 600px) {
-  header nav { display: none; }
-  .bottom-nav { display: flex; }
-  main { padding: 14px 10px 84px; }
-  .s-card { padding: 10px 10px; gap: 9px; }
-  .s-avatar { width: 36px; height: 36px; }
-  .s-time .hm { font-size: .95rem; }
+@media (max-width:480px) {
+  main { padding:12px 10px 24px; }
+  .member-grid { grid-template-columns:repeat(auto-fill, minmax(52px,1fr)); gap:6px; }
+  .m-icon { width:34px; height:34px; font-size:.85rem; }
+  .m-name { font-size:.56rem; }
+  .date-tabs { gap:3px; }
+  .d-tab { padding:6px 2px; }
+  .d-tab .dd { font-size:.78rem; }
+  .s-card { padding:9px 10px; gap:8px; }
+  .s-avatar { width:35px; height:35px; font-size:.85rem; }
+  .s-hm { font-size:.95rem; }
+}
+@media (max-width:360px) {
+  .member-grid { grid-template-columns:repeat(auto-fill, minmax(46px,1fr)); gap:5px; }
+  .m-icon { width:30px; height:30px; }
 }
 </style>
 </head>
 <body>
 
-<!-- LOADING -->
 <div id="loading">
   <div class="spin"></div>
-  <div style="font-size:.8rem;color:var(--purple);font-weight:600">読み込み中…</div>
+  <div style="font-size:.78rem;color:var(--purple);font-weight:600">読み込み中…</div>
 </div>
 
-<!-- HEADER -->
 <header>
   <div class="logo">
     <div class="logo-dot">⚡</div>
-    <span>Vspo! Schedule</span>
+    Vspo! Schedule
   </div>
   <div class="lang-row">
     <button class="lang-btn on" onclick="setLang('ja')">JP</button>
@@ -276,16 +198,16 @@ footer {
   </div>
 </header>
 
-<!-- LIVE BAR -->
 <div class="live-bar" id="liveBar">
   <div class="live-pill">LIVE</div>
-  <div class="live-names" id="liveNames"></div>
+  <div class="live-chips" id="liveChips"></div>
 </div>
 
-<!-- MAIN -->
 <main>
-  <!-- メンバー横スクロール -->
-  <div class="members-row" id="membersRow"></div>
+  <div class="section-label" id="memberLabel">メンバー</div>
+
+  <!-- 全員グリッド -->
+  <div class="member-grid" id="memberGrid"></div>
 
   <!-- フィルター中表示 -->
   <div class="filter-bar" id="filterBar">
@@ -293,77 +215,60 @@ footer {
     <button onclick="clearFilter()">✕ 解除</button>
   </div>
 
-  <!-- 日付タブ -->
+  <div class="section-label" id="scheduleLabel">配信スケジュール</div>
+
+  <!-- 日付タブ（7日分・横幅いっぱいに均等） -->
   <div class="date-tabs" id="dateTabs"></div>
 
   <!-- スケジュール -->
   <div class="schedule-list" id="scheduleList"></div>
 </main>
 
-<!-- FOOTER -->
 <footer>
-  <span>© 2026 非公式ファンサイト</span>
-  <span><span class="upd-dot"></span><span id="updTime">—</span></span>
+  <div>© 2026 非公式ファンサイト / Unofficial Fan Site</div>
+  <div style="margin-top:4px"><span class="upd-dot"></span><span id="updTime">—</span></div>
 </footer>
 
-<!-- BOTTOM NAV -->
-<div class="bottom-nav" id="bottomNav">
-  <button class="bn-btn on" id="bnHome" onclick="scrollToTop()">
-    <span class="ico">📅</span><span>スケジュール</span>
-  </button>
-  <button class="bn-btn" onclick="toggleLang()">
-    <span class="ico">🌐</span><span id="bnLangLabel">EN</span>
-  </button>
-</div>
-
 <script>
-// ─────────────────────────────────────────────
-// メンバーデータ
-// ─────────────────────────────────────────────
 const MEMBERS = [
-  { id:'sumire',  ja:'花芽すみれ',   en:'Kaga Sumire',       ch:'UCyLGcqYs7RsBb3L0SJfzGYA', tw:'kagasumire',   color:'#ec4899' },
-  { id:'nazuna',  ja:'花芽なずな',   en:'Kaga Nazuna',       ch:'UCiMG6VdScBabPhJ1ZtaVmbw', tw:'nazunalive',   color:'#8b5cf6' },
-  { id:'toto',    ja:'小雀とと',     en:'Kogara Toto',       ch:'UCgTzsBI0DIRopMylJEDqnog', tw:'',             color:'#f97316' },
-  { id:'uruha',   ja:'一ノ瀬うるは', en:'Ichinose Uruha',    ch:'UC5LyYg6cCA4yHEYvtUsir3g', tw:'ichinose_uruha',color:'#db2777' },
-  { id:'noah',    ja:'胡桃のあ',     en:'Kurumi Noah',       ch:'UCIcAj6WkJ8vZ7DeJVgmeqKw', tw:'963noah',      color:'#059669' },
-  { id:'mimi',    ja:'兎咲ミミ',     en:'Tosaki Mimi',       ch:'UCnvVG9RbOW3J6Ifqo-zKLiw', tw:'',             color:'#f472b6' },
-  { id:'sena',    ja:'空澄セナ',     en:'Asumi Sena',        ch:'UCF_U2GCKHvDz52jWdizppIA', tw:'kasumisena',   color:'#3b82f6' },
-  { id:'hinano',  ja:'橘ひなの',     en:'Tachibana Hinano',  ch:'UCvUc0m317LWTTPZoBQV479A', tw:'hinano_vspo',  color:'#d97706' },
-  { id:'lisa',    ja:'英リサ',       en:'Hanabusa Lisa',     ch:'UCurEA8YoqFwimJcAuSHU0MQ', tw:'lisahanabusa', color:'#7c3aed' },
-  { id:'ren',     ja:'如月れん',     en:'Kisaragi Ren',      ch:'UCGWa1dMU_sDCaRQjdabsVgg', tw:'ren_vspo',     color:'#0ea5e9' },
-  { id:'kyupi',   ja:'神成きゅぴ',   en:'Kaminari Qpi',      ch:'UCMp55EbT_ZlqiMS3lCj01BQ', tw:'kyupi_vspo',   color:'#ca8a04' },
-  { id:'beni',    ja:'八雲べに',     en:'Yakumo Beni',       ch:'UCjXBuHmWkieBApgBhDuJMMQ', tw:'',             color:'#dc2626' },
-  { id:'ema',     ja:'藍沢エマ',     en:'Aizawa Ema',        ch:'UCPkKpOHxEDcwmUAnRpIu-5A', tw:'aizawa_ema',   color:'#10b981' },
-  { id:'runa',    ja:'紫宮るな',     en:'Shinomiya Runa',    ch:'UCD5W21JqNMv_tV9nfjvF9sw', tw:'runa_vspo',    color:'#6366f1' },
-  { id:'tuna',    ja:'猫汰つな',     en:'Nekota Tsuna',      ch:'UCIjdfjcSaEgdjwbgjxC3ZWg', tw:'nekota_tsuna', color:'#f87171' },
-  { id:'ramune',  ja:'白波らむね',   en:'Shiranami Ramune',  ch:'UC61OwuYOVuKkpKnid-43Twg', tw:'ramune_vspo',  color:'#22c55e' },
-  { id:'meto',    ja:'小森めと',     en:'Komori Met',        ch:'UCzUNASdzI4PV5SlqtYwAkKQ', tw:'meto_vspo',    color:'#a78bfa' },
-  { id:'akari',   ja:'夢野あかり',   en:'Yumeno Akari',      ch:'UCS5l_Y0oMVTjEos2LuyeSZQ', tw:'akari_vspo',   color:'#fbbf24' },
-  { id:'kuromu',  ja:'夜乃くろむ',   en:'Yano Kuromu',       ch:'UCX4WL24YEOUYd7qDsFSLDOw', tw:'kuromu_vspo',  color:'#818cf8' },
-  { id:'kokage',  ja:'紡木こかげ',   en:'Tsumugi Kokage',    ch:'UC-WX1CXssCtCtc2TNIRnJzg', tw:'kokage_tsumugi',color:'#2dd4bf' },
-  { id:'yuuhi',   ja:'千燈ゆうひ',   en:'Sendo Yuuhi',       ch:'UCuDY3ibSP2MFRgf7eo3cojg', tw:'yuuhi_vspo',   color:'#fb7185' },
-  { id:'hanabi',  ja:'蝶屋はなび',   en:'Choya Hanabi',      ch:'UCL9hJsdk9eQa0IlWbFB2oRg', tw:'',             color:'#fb923c' },
-  { id:'moka',    ja:'甘結もか',     en:'Amayui Moka',       ch:'UC8vKBjGY2HVfbW9GAmgikWw', tw:'',             color:'#38bdf8' },
-  { id:'saine',   ja:'銀城サイネ',   en:'Ginjo Saine',       ch:'UC2xXx1m1jeL0W84_0jTg-Yw', tw:'',             color:'#86efac' },
-  { id:'chise',   ja:'龍巻ちせ',     en:'Tatsumaki Chise',   ch:'UCoW8qQy80mKH0RJTKAKKhg',  tw:'',             color:'#d8b4fe' },
+  { id:'sumire', ja:'花芽すみれ',   en:'Sumire',   ch:'UCyLGcqYs7RsBb3L0SJfzGYA', color:'#ec4899' },
+  { id:'nazuna', ja:'花芽なずな',   en:'Nazuna',   ch:'UCiMG6VdScBabPhJ1ZtaVmbw', color:'#8b5cf6' },
+  { id:'toto',   ja:'小雀とと',     en:'Toto',     ch:'UCgTzsBI0DIRopMylJEDqnog', color:'#f97316' },
+  { id:'uruha',  ja:'一ノ瀬うるは', en:'Uruha',    ch:'UC5LyYg6cCA4yHEYvtUsir3g', color:'#db2777' },
+  { id:'noah',   ja:'胡桃のあ',     en:'Noah',     ch:'UCIcAj6WkJ8vZ7DeJVgmeqKw', color:'#059669' },
+  { id:'mimi',   ja:'兎咲ミミ',     en:'Mimi',     ch:'UCnvVG9RbOW3J6Ifqo-zKLiw', color:'#f472b6' },
+  { id:'sena',   ja:'空澄セナ',     en:'Sena',     ch:'UCF_U2GCKHvDz52jWdizppIA', color:'#3b82f6' },
+  { id:'hinano', ja:'橘ひなの',     en:'Hinano',   ch:'UCvUc0m317LWTTPZoBQV479A', color:'#d97706' },
+  { id:'lisa',   ja:'英リサ',       en:'Lisa',     ch:'UCurEA8YoqFwimJcAuSHU0MQ', color:'#7c3aed' },
+  { id:'ren',    ja:'如月れん',     en:'Ren',      ch:'UCGWa1dMU_sDCaRQjdabsVgg', color:'#0ea5e9' },
+  { id:'kyupi',  ja:'神成きゅぴ',   en:'Qpi',      ch:'UCMp55EbT_ZlqiMS3lCj01BQ', color:'#ca8a04' },
+  { id:'beni',   ja:'八雲べに',     en:'Beni',     ch:'UCjXBuHmWkieBApgBhDuJMMQ', color:'#dc2626' },
+  { id:'ema',    ja:'藍沢エマ',     en:'Ema',      ch:'UCPkKpOHxEDcwmUAnRpIu-5A', color:'#10b981' },
+  { id:'runa',   ja:'紫宮るな',     en:'Runa',     ch:'UCD5W21JqNMv_tV9nfjvF9sw', color:'#6366f1' },
+  { id:'tuna',   ja:'猫汰つな',     en:'Tsuna',    ch:'UCIjdfjcSaEgdjwbgjxC3ZWg', color:'#f87171' },
+  { id:'ramune', ja:'白波らむね',   en:'Ramune',   ch:'UC61OwuYOVuKkpKnid-43Twg', color:'#22c55e' },
+  { id:'meto',   ja:'小森めと',     en:'Met',      ch:'UCzUNASdzI4PV5SlqtYwAkKQ', color:'#a78bfa' },
+  { id:'akari',  ja:'夢野あかり',   en:'Akari',    ch:'UCS5l_Y0oMVTjEos2LuyeSZQ', color:'#fbbf24' },
+  { id:'kuromu', ja:'夜乃くろむ',   en:'Kuromu',   ch:'UCX4WL24YEOUYd7qDsFSLDOw', color:'#818cf8' },
+  { id:'kokage', ja:'紡木こかげ',   en:'Kokage',   ch:'UC-WX1CXssCtCtc2TNIRnJzg', color:'#2dd4bf' },
+  { id:'yuuhi',  ja:'千燈ゆうひ',   en:'Yuuhi',    ch:'UCuDY3ibSP2MFRgf7eo3cojg', color:'#fb7185' },
+  { id:'hanabi', ja:'蝶屋はなび',   en:'Hanabi',   ch:'UCL9hJsdk9eQa0IlWbFB2oRg', color:'#fb923c' },
+  { id:'moka',   ja:'甘結もか',     en:'Moka',     ch:'UC8vKBjGY2HVfbW9GAmgikWw', color:'#38bdf8' },
+  { id:'saine',  ja:'銀城サイネ',   en:'Saine',    ch:'UC2xXx1m1jeL0W84_0jTg-Yw', color:'#86efac' },
+  { id:'chise',  ja:'龍巻ちせ',     en:'Chise',    ch:'UCoW8qQy80mKH0RJTKAKKhg',  color:'#d8b4fe' },
 ];
 
-// ─────────────────────────────────────────────
-// 状態
-// ─────────────────────────────────────────────
-let lang       = 'ja';
-let filterMem  = null;  // 選択中メンバーID
-let activeDay  = 0;     // 0=今日, 1=明日 …
-let SCHEDULE   = [];
-let LIVE       = [];
-let ICONS      = {};    // { memberId: iconUrl }
-const TODAY    = new Date();
+let lang      = 'ja';
+let filterMem = null;
+let activeDay = 0;
+let SCHEDULE  = [];
+let LIVE      = [];
+let ICONS     = {};
+const TODAY   = new Date();
 
-// ─────────────────────────────────────────────
-// データ取得
-// ─────────────────────────────────────────────
+// ── データ取得 ──
 async function load() {
-  const safe = (p) => p.catch(() => null);
+  const safe = p => p.catch(() => null);
   const [sch, lv, mem] = await Promise.all([
     safe(fetch('schedule.json?t='+Date.now()).then(r=>r.json())),
     safe(fetch('live.json?t='+Date.now()).then(r=>r.json())),
@@ -374,201 +279,192 @@ async function load() {
   if (Array.isArray(mem)) mem.forEach(m => { if (m.iconUrl) ICONS[m.id] = m.iconUrl; });
 }
 
-// ─────────────────────────────────────────────
-// 初期化
-// ─────────────────────────────────────────────
 async function init() {
   await load();
   document.getElementById('loading').style.display = 'none';
   renderAll();
   setInterval(async () => {
-    const lv = await fetch('live.json?t='+Date.now()).then(r=>r.json()).catch(()=>[]);
-    LIVE = Array.isArray(lv) ? lv : [];
-    renderLiveBar(); renderMembers();
-  }, 5 * 60 * 1000);
+    LIVE = await fetch('live.json?t='+Date.now()).then(r=>r.json()).catch(()=>[]);
+    renderLiveBar(); renderMemberGrid();
+  }, 5*60*1000);
   setInterval(async () => {
-    const sch = await fetch('schedule.json?t='+Date.now()).then(r=>r.json()).catch(()=>[]);
-    SCHEDULE = Array.isArray(sch) ? sch : [];
+    SCHEDULE = await fetch('schedule.json?t='+Date.now()).then(r=>r.json()).catch(()=>[]);
     renderSchedule();
     document.getElementById('updTime').textContent = fmtNow();
-  }, 30 * 60 * 1000);
+  }, 30*60*1000);
 }
 
 function renderAll() {
+  updateLabels();
   renderLiveBar();
-  renderMembers();
+  renderMemberGrid();
   renderDateTabs();
   renderSchedule();
   document.getElementById('updTime').textContent = fmtNow();
 }
 
-// ─────────────────────────────────────────────
-// 言語
-// ─────────────────────────────────────────────
+// ── 言語 ──
 function setLang(l) {
   lang = l;
   document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('on', b.textContent.trim() === l.toUpperCase()));
-  const lbl = document.getElementById('bnLangLabel');
-  if (lbl) lbl.textContent = l === 'ja' ? 'EN' : 'JP';
   renderAll();
 }
-function toggleLang() { setLang(lang === 'ja' ? 'en' : 'ja'); }
 
-// ─────────────────────────────────────────────
-// Live バー
-// ─────────────────────────────────────────────
+function updateLabels() {
+  document.getElementById('memberLabel').childNodes[0].textContent = lang === 'ja' ? 'メンバー' : 'Members';
+  document.getElementById('scheduleLabel').childNodes[0].textContent = lang === 'ja' ? '配信スケジュール' : 'Stream Schedule';
+}
+
+// ── Live バー ──
 function renderLiveBar() {
   const bar = document.getElementById('liveBar');
   if (!LIVE.length) { bar.classList.remove('show'); return; }
   bar.classList.add('show');
-  document.getElementById('liveNames').innerHTML = LIVE.map(l => {
+  document.getElementById('liveChips').innerHTML = LIVE.map(l => {
     const m = MEMBERS.find(x => x.id === l.memberId);
     if (!m) return '';
-    const name = lang === 'ja' ? m.ja : m.en;
     const icon = ICONS[m.id];
     return `<a class="live-chip" href="${l.url}" target="_blank" rel="noopener">
       ${icon ? `<img src="${icon}" referrerpolicy="no-referrer" onerror="this.style.display='none'">` : '🔴'}
-      ${name}
+      ${lang==='ja'?m.ja:m.en}
     </a>`;
   }).join('');
 }
 
-// ─────────────────────────────────────────────
-// メンバー一覧（横スクロール）
-// ─────────────────────────────────────────────
-function renderMembers() {
+// ── メンバーグリッド ──
+function renderMemberGrid() {
   const liveIds = new Set(LIVE.map(l => l.memberId));
-  document.getElementById('membersRow').innerHTML = MEMBERS.map(m => {
-    const name = lang === 'ja' ? m.ja : m.en;
+
+  // 「全員」ボタン
+  const allBtn = `<div class="m-all-btn ${!filterMem?'on':''}" onclick="clearFilter()">
+    <div class="m-icon">👥</div>
+    <div class="m-name">${lang==='ja'?'全員':'All'}</div>
+  </div>`;
+
+  const cells = MEMBERS.map(m => {
+    const name = lang==='ja' ? m.ja : m.en;
     const icon = ICONS[m.id];
+    const ini  = m.ja[0];
     const on   = filterMem === m.id;
     const live = liveIds.has(m.id);
-    return `<div class="m-chip ${on ? 'on' : ''}" style="--member-color:${m.color}" onclick="toggleFilter('${m.id}','${name}')">
+    return `<div class="m-cell ${on?'on':''}" style="--c:${m.color}" onclick="toggleFilter('${m.id}','${name}')">
       ${live ? '<div class="m-live-dot"></div>' : ''}
-      ${icon
-        ? `<img src="${icon}" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`
-        : ''}
-      <div class="m-ini" style="${icon ? 'display:none' : ''}">${m.ja[0]}</div>
-      <span class="m-chip-name">${name}</span>
+      <div class="m-icon">
+        ${icon
+          ? `<img src="${icon}" referrerpolicy="no-referrer" onerror="this.style.display='none';this.parentNode.innerHTML='${ini}'">`
+          : ini}
+      </div>
+      <div class="m-name">${name}</div>
     </div>`;
   }).join('');
+
+  document.getElementById('memberGrid').innerHTML = allBtn + cells;
 }
 
-// ─────────────────────────────────────────────
-// フィルター
-// ─────────────────────────────────────────────
+// ── フィルター ──
 function toggleFilter(id, name) {
   filterMem = filterMem === id ? null : id;
   const bar = document.getElementById('filterBar');
   if (filterMem) {
     bar.classList.add('show');
-    document.getElementById('filterLabel').textContent = `${name} のスケジュール`;
+    document.getElementById('filterLabel').textContent =
+      (lang==='ja'?'🔍 ':'🔍 ') + name + (lang==='ja'?' のスケジュール':' schedule');
   } else {
     bar.classList.remove('show');
   }
-  renderMembers();
+  renderMemberGrid();
   renderSchedule();
 }
 function clearFilter() {
   filterMem = null;
   document.getElementById('filterBar').classList.remove('show');
-  renderMembers();
+  renderMemberGrid();
   renderSchedule();
 }
 
-// ─────────────────────────────────────────────
-// 日付タブ
-// ─────────────────────────────────────────────
+// ── 日付タブ（7日分・均等） ──
 const WD_JA = ['日','月','火','水','木','金','土'];
 const WD_EN = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
 function renderDateTabs() {
   document.getElementById('dateTabs').innerHTML = Array.from({length:7}, (_,i) => {
-    const d  = new Date(TODAY);
-    d.setDate(d.getDate() + i);
-    const wd = (lang === 'ja' ? WD_JA : WD_EN)[d.getDay()];
-    const label = i === 0 ? (lang === 'ja' ? '今日' : 'Today')
-                : i === 1 ? (lang === 'ja' ? '明日' : 'Tmrw') : wd;
-    return `<div class="d-tab ${activeDay === i ? 'on' : ''}" onclick="setDay(${i})">
-      <div class="wd">${label}</div>
+    const d   = new Date(TODAY); d.setDate(d.getDate()+i);
+    const day = d.getDay(); // 0=日,6=土
+    const wdArr = lang==='ja' ? WD_JA : WD_EN;
+    const wd  = wdArr[day];
+    const lbl = i===0 ? (lang==='ja'?'今日':'Today') : i===1 ? (lang==='ja'?'明日':'Tmrw') : wd;
+    const cls = day===0 ? 'sun' : day===6 ? 'sat' : '';
+    return `<div class="d-tab ${activeDay===i?'on':''} ${cls}" onclick="setDay(${i})">
+      <div class="wd">${lbl}</div>
       <div class="dd">${d.getMonth()+1}/${d.getDate()}</div>
     </div>`;
   }).join('');
 }
-function setDay(i) { activeDay = i; renderDateTabs(); renderSchedule(); }
+function setDay(i) { activeDay=i; renderDateTabs(); renderSchedule(); }
 
-// ─────────────────────────────────────────────
-// スケジュールリスト
-// ─────────────────────────────────────────────
+// ── スケジュール ──
 function renderSchedule() {
   const tgt = new Date(TODAY);
   tgt.setDate(tgt.getDate() + activeDay);
 
-  // live.json（配信中）と schedule.json（予定）をマージ
-  const liveItems  = LIVE.map(l => ({...l, isLive:true, datetime: l.startedAt}));
-  const schedItems = SCHEDULE.filter(s => !LIVE.some(l => l.memberId === s.memberId && l.platform === s.platform));
+  const liveItems  = LIVE.map(l => ({...l, isLive:true, datetime:l.startedAt}));
+  const schedItems = SCHEDULE.filter(s => !LIVE.some(l => l.memberId===s.memberId && l.platform===s.platform));
   const all = [...liveItems, ...schedItems];
 
   const items = all.filter(s => {
     const dt = new Date(s.datetime);
-    return dt.getFullYear() === tgt.getFullYear()
-        && dt.getMonth()    === tgt.getMonth()
-        && dt.getDate()     === tgt.getDate()
-        && (!filterMem || s.memberId === filterMem);
-  }).sort((a,b) => new Date(a.datetime) - new Date(b.datetime));
+    return dt.getFullYear()===tgt.getFullYear()
+        && dt.getMonth()===tgt.getMonth()
+        && dt.getDate()===tgt.getDate()
+        && (!filterMem || s.memberId===filterMem);
+  }).sort((a,b) => new Date(a.datetime)-new Date(b.datetime));
 
   const list = document.getElementById('scheduleList');
 
   if (!items.length) {
     list.innerHTML = `<div class="empty">
       <div class="empty-icon">📭</div>
-      <div class="empty-text">${lang==='ja' ? 'この日の配信予定はありません' : 'No streams scheduled'}</div>
+      <div>${lang==='ja'?'この日の配信予定はありません':'No streams scheduled'}</div>
     </div>`;
     return;
   }
 
   list.innerHTML = items.map(s => {
-    const m = MEMBERS.find(x => x.id === s.memberId);
-    if (!m) return '';
-    const name  = lang === 'ja' ? m.ja : m.en;
-    const dt    = new Date(s.datetime);
-    const hh    = String(dt.getHours()).padStart(2,'0');
-    const mm    = String(dt.getMinutes()).padStart(2,'0');
-    const dur   = s.durationMin && s.durationMin > 0
-      ? `${Math.floor(s.durationMin/60)}h${s.durationMin%60 ? s.durationMin%60+'m' : ''}` : '';
-    const plat  = s.isLive ? 'LIVE' : (s.platform === 'youtube' ? 'YouTube' : 'Twitch');
-    const bcls  = s.isLive ? 'live' : (s.platform === 'youtube' ? 'yt' : 'tw');
-    const url   = s.url || `https://www.youtube.com/channel/${m.ch}`;
-    const icon  = ICONS[m.id];
-    const ini   = m.ja[0];
-    return `<a class="s-card ${s.isLive ? 'is-live' : ''}" href="${url}" target="_blank" rel="noopener"
-        style="--member-color:${m.color}">
+    const m = MEMBERS.find(x => x.id===s.memberId); if (!m) return '';
+    const name = lang==='ja' ? m.ja : m.en;
+    const dt   = new Date(s.datetime);
+    const hh   = String(dt.getHours()).padStart(2,'0');
+    const mm   = String(dt.getMinutes()).padStart(2,'0');
+    const dur  = s.durationMin>0 ? `${Math.floor(s.durationMin/60)}h${s.durationMin%60?s.durationMin%60+'m':''}` : '';
+    const plat = s.isLive ? 'LIVE' : s.platform==='youtube' ? 'YouTube' : 'Twitch';
+    const bcls = s.isLive ? 'live' : s.platform==='youtube' ? 'yt' : 'tw';
+    const url  = s.url || `https://www.youtube.com/channel/${m.ch}`;
+    const icon = ICONS[m.id];
+    const ini  = m.ja[0];
+
+    return `<a class="s-card ${s.isLive?'is-live':''}" href="${url}" target="_blank" rel="noopener" style="--c:${m.color}">
       <div class="s-avatar">
         ${icon ? `<img src="${icon}" referrerpolicy="no-referrer" onerror="this.style.display='none'">` : ini}
       </div>
       <div class="s-body">
         <div class="s-top">
           <span class="s-name">${name}</span>
-          <span class="s-badge ${bcls}">${plat}</span>
+          <span class="badge ${bcls}">${plat}</span>
         </div>
-        <div class="s-title">${s.title || '—'}</div>
+        <div class="s-title">${s.title||'—'}</div>
       </div>
       <div class="s-time">
-        <div class="hm">${hh}:${mm}</div>
-        ${dur ? `<div class="dur">⏱ ${dur}</div>` : ''}
+        <div class="s-hm">${hh}:${mm}</div>
+        ${dur?`<div class="s-dur">⏱ ${dur}</div>`:''}
       </div>
     </a>`;
   }).join('');
 }
 
-// ─────────────────────────────────────────────
-// ユーティリティ
-// ─────────────────────────────────────────────
 function fmtNow() {
   const n = new Date();
   return `更新 ${n.getMonth()+1}/${n.getDate()} ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;
 }
-function scrollToTop() { window.scrollTo({top:0, behavior:'smooth'}); }
 
 init();
 </script>
