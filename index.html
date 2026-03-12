@@ -4,1251 +4,572 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vspo! Schedule</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=DM+Sans:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:        #f5f3ff;
-  --bg2:       #ede9fe;
+  --purple:    #7c3aed;
+  --purple-lt: #ede9fe;
+  --purple-md: #ddd6fe;
+  --purple-dk: #5b21b6;
+  --bg:        #faf9ff;
   --surface:   #ffffff;
-  --surface2:  #faf8ff;
-  --border:    #ddd6fe;
-  --border2:   #c4b5fd;
-  --accent:    #7c3aed;
-  --accent2:   #a855f7;
-  --accent3:   #c084fc;
-  --accent-lt: #ede9fe;
-  --live:      #dc2626;
-  --text:      #1e1b4b;
-  --text2:     #4c1d95;
-  --muted:     #7c3aed80;
-  --muted2:    #6b7280;
-  --yt:        #dc2626;
-  --twitch:    #7c3aed;
-  --shadow:    0 1px 3px rgba(124,58,237,.12), 0 4px 16px rgba(124,58,237,.08);
-  --shadow-lg: 0 4px 24px rgba(124,58,237,.18);
-  --radius:    12px;
-  --radius-sm: 8px;
+  --border:    #e8e3fa;
+  --text:      #1e1b2e;
+  --muted:     #6b7280;
+  --live:      #ef4444;
 }
+
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior: smooth; }
+html { font-size: 15px; }
 body {
+  font-family: 'Noto Sans JP', sans-serif;
   background: var(--bg);
   color: var(--text);
-  font-family: 'Noto Sans JP', sans-serif;
   min-height: 100vh;
-  overflow-x: hidden;
-  font-size: 14px;
 }
 
 /* ── LOADING ── */
-#loadingScreen {
-  position:fixed; inset:0; z-index:9999;
-  background: linear-gradient(135deg, #f5f3ff, #ede9fe);
-  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;
+#loading {
+  position:fixed; inset:0; z-index:999;
+  background: var(--bg);
+  display:flex; align-items:center; justify-content:center; flex-direction:column; gap:14px;
 }
-.loader-ring {
-  width:48px; height:48px; border-radius:50%;
-  border:3px solid var(--border);
-  border-top-color: var(--accent);
-  animation: spin .8s linear infinite;
+.spin {
+  width:36px; height:36px; border-radius:50%;
+  border:3px solid var(--purple-md);
+  border-top-color: var(--purple);
+  animation: spin .7s linear infinite;
 }
-@keyframes spin { to { transform:rotate(360deg) } }
+@keyframes spin { to { transform: rotate(360deg); } }
 
 /* ── HEADER ── */
 header {
-  position:sticky; top:0; z-index:100;
-  background:rgba(255,255,255,.92);
-  backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);
-  padding:0 20px; height:56px;
-  display:flex; align-items:center; justify-content:space-between;
-  gap:12px;
-  box-shadow: 0 1px 0 var(--border);
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255,255,255,.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1.5px solid var(--border);
+  padding: 0 16px;
+  height: 54px;
+  display: flex; align-items: center; justify-content: space-between;
 }
-.logo { display:flex; align-items:center; gap:10px; flex-shrink:0; }
-.logo-icon {
-  width:32px; height:32px;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  border-radius:8px;
-  display:flex; align-items:center; justify-content:center;
-  font-size:16px; flex-shrink:0;
+.logo {
+  display: flex; align-items: center; gap: 9px;
+  font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 1.1rem;
+  color: var(--purple); letter-spacing: .02em;
 }
-.logo-text {
-  font-family:'Rajdhani',sans-serif; font-weight:700; font-size:1.25rem;
-  letter-spacing:.08em; color: var(--accent);
+.logo-dot {
+  width: 28px; height: 28px;
+  background: linear-gradient(135deg, var(--purple), #a78bfa);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
 }
-.logo-sub { font-size:.6rem; color:var(--muted2); letter-spacing:.15em; text-transform:uppercase; }
-.header-right { display:flex; align-items:center; gap:8px; flex-shrink:0; }
-nav { display:flex; gap:4px; }
-.nav-btn {
-  background:transparent; border:1.5px solid var(--border);
-  color:var(--muted2); padding:5px 12px; border-radius:20px;
-  cursor:pointer; font-family:'Noto Sans JP',sans-serif; font-size:.78rem; font-weight:500;
-  transition:all .18s; white-space:nowrap;
-}
-.nav-btn:hover { border-color:var(--accent); color:var(--accent); background:var(--accent-lt); }
-.nav-btn.active { border-color:var(--accent); color:#fff; background:var(--accent); }
-.lang-switch { display:flex; gap:2px; border-left:1px solid var(--border); padding-left:8px; }
+.lang-row { display: flex; gap: 2px; }
 .lang-btn {
-  background:transparent; border:none; color:var(--muted2);
-  font-size:.78rem; cursor:pointer; padding:4px 7px;
-  border-radius:6px; transition:all .18s; font-weight:500;
+  background: none; border: 1.5px solid var(--border);
+  color: var(--muted); font-size: .75rem; font-weight: 700;
+  padding: 4px 9px; border-radius: 6px; cursor: pointer;
+  transition: all .15s;
 }
-.lang-btn.active { color:var(--accent); background:var(--accent-lt); }
+.lang-btn.on { background: var(--purple); border-color: var(--purple); color: #fff; }
 
-/* ── MOBILE NAV (bottom bar) ── */
-.mobile-nav {
-  display:none;
-  position:fixed; bottom:0; left:0; right:0; z-index:100;
-  background:#fff; border-top:1px solid var(--border);
-  padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+/* ── LIVE BAR ── */
+.live-bar {
+  display: none;
+  background: #fff5f5; border-bottom: 1.5px solid #fecaca;
+  padding: 7px 16px; align-items: center; gap: 10px;
+  overflow: hidden;
 }
-.mobile-nav-inner { display:flex; justify-content:space-around; }
-.mobile-nav-btn {
-  display:flex; flex-direction:column; align-items:center; gap:3px;
-  background:none; border:none; cursor:pointer;
-  color:var(--muted2); font-size:.7rem; font-weight:500; padding:4px 12px;
-  transition:color .18s;
+.live-bar.show { display: flex; }
+.live-pill {
+  flex-shrink: 0; background: var(--live); color: #fff;
+  font-size: .65rem; font-weight: 700; padding: 2px 7px;
+  border-radius: 99px; letter-spacing: .08em;
+  animation: blink 1.4s infinite;
 }
-.mobile-nav-btn .mnb-icon { font-size:1.3rem; }
-.mobile-nav-btn.active { color:var(--accent); }
+@keyframes blink { 50% { opacity: .55; } }
+.live-names { display: flex; gap: 7px; overflow-x: auto; flex: 1; scrollbar-width: none; }
+.live-names::-webkit-scrollbar { display: none; }
+.live-chip {
+  flex-shrink: 0; display: flex; align-items: center; gap: 5px;
+  background: #fff; border: 1.5px solid #fecaca;
+  color: var(--live); font-size: .78rem; font-weight: 600;
+  padding: 3px 10px; border-radius: 99px;
+  text-decoration: none; transition: background .12s;
+}
+.live-chip:hover { background: #fff5f5; }
+.live-chip img {
+  width: 18px; height: 18px; border-radius: 50%; object-fit: cover;
+  border: 1px solid #fecaca;
+}
 
-/* ── LIVE BANNER ── */
-.live-banner {
-  background: linear-gradient(90deg, #fef2f2, #fff1f2);
-  border-bottom:1.5px solid #fecaca;
-  padding:8px 20px;
-  display:flex; align-items:center; gap:12px;
-  animation:slidein .3s ease;
-}
-@keyframes slidein { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:none} }
-.live-dot {
-  width:8px; height:8px; background:var(--live);
-  border-radius:50%; animation:blink 1.2s infinite; flex-shrink:0;
-}
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
-.live-label { font-size:.72rem; color:var(--live); font-weight:700; letter-spacing:.1em; flex-shrink:0; }
-.live-items { display:flex; gap:8px; overflow-x:auto; flex:1; scrollbar-width:none; }
-.live-items::-webkit-scrollbar { display:none; }
-.live-item {
-  display:flex; align-items:center; gap:5px; padding:3px 10px;
-  background:#fff; border:1.5px solid #fecaca; border-radius:20px;
-  text-decoration:none; color:var(--live); font-size:.78rem; font-weight:600;
-  white-space:nowrap; transition:all .15s; flex-shrink:0;
-}
-.live-item:hover { background:#fef2f2; }
+/* ── MAIN LAYOUT ── */
+main { max-width: 800px; margin: 0 auto; padding: 20px 14px 100px; }
 
-/* ── MAIN ── */
-main { padding:20px 20px 100px; max-width:980px; margin:0 auto; }
-section { margin-bottom:32px; }
-
-/* ── SECTION HEADER ── */
-.section-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
-.section-title {
-  font-size:.78rem; font-weight:700; letter-spacing:.15em; text-transform:uppercase;
-  color:var(--accent); white-space:nowrap;
+/* ── MEMBER STRIP ── */
+.members-row {
+  display: flex; gap: 8px; overflow-x: auto;
+  padding: 2px 0 10px; scrollbar-width: none; margin-bottom: 20px;
 }
-.section-line { flex:1; height:1px; background:var(--border); }
-
-/* ── MEMBERS GRID ── */
-.members-grid {
-  display:grid;
-  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
-  gap:10px;
+.members-row::-webkit-scrollbar { display: none; }
+.m-chip {
+  flex-shrink: 0; display: flex; align-items: center; gap: 6px;
+  padding: 5px 11px 5px 5px;
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 99px; cursor: pointer; transition: all .15s;
+  position: relative;
 }
-.member-card {
-  display:flex; flex-direction:column; align-items:center; gap:5px;
-  padding:10px 4px 8px;
-  background:var(--surface); border:1.5px solid var(--border);
-  border-radius:var(--radius); cursor:pointer;
-  transition:all .18s; position:relative;
-  text-align:center;
+.m-chip:hover { border-color: var(--member-color, var(--purple)); }
+.m-chip.on {
+  background: color-mix(in srgb, var(--member-color, var(--purple)) 10%, #fff);
+  border-color: var(--member-color, var(--purple));
 }
-.member-card:hover { border-color:var(--member-color,var(--accent)); box-shadow:0 0 0 3px color-mix(in srgb, var(--member-color,var(--accent)) 15%, transparent); transform:translateY(-2px); }
-.member-card.active { border-color:var(--member-color,var(--accent)); background:color-mix(in srgb, var(--member-color,var(--accent)) 8%, #fff); box-shadow:0 0 0 3px color-mix(in srgb, var(--member-color,var(--accent)) 20%, transparent); }
-.member-avatar {
-  width:44px; height:44px; border-radius:50%; overflow:hidden;
-  background:color-mix(in srgb, var(--member-color,var(--accent)) 20%, #fff);
-  border:2px solid var(--border);
-  display:flex; align-items:center; justify-content:center;
-  font-size:1.1rem; font-weight:700; color:var(--member-color,var(--accent));
-  flex-shrink:0; transition:border-color .18s;
+.m-chip img, .m-chip .m-ini {
+  width: 26px; height: 26px; border-radius: 50%; object-fit: cover;
+  border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .75rem; font-weight: 700;
+  background: color-mix(in srgb, var(--member-color, var(--purple)) 18%, #fff);
+  color: var(--member-color, var(--purple));
 }
-.member-card.active .member-avatar, .member-card:hover .member-avatar { border-color:var(--member-color,var(--accent)); }
-.member-avatar img { width:100%; height:100%; object-fit:cover; }
-.member-avatar[data-fallback='true']::after {
-  content: attr(data-ini);
-  font-size:1.1rem; font-weight:700; color:var(--member-color,var(--accent));
-}
-.member-name { font-size:.68rem; font-weight:700; color:var(--text); line-height:1.2; word-break:break-all; }
-.live-badge {
-  position:absolute; top:5px; right:5px;
-  background:var(--live); color:#fff; font-size:.55rem; font-weight:700;
-  padding:1px 4px; border-radius:4px; letter-spacing:.05em;
+.m-chip.on img, .m-chip.on .m-ini { border-color: var(--member-color, var(--purple)); }
+.m-chip-name { font-size: .75rem; font-weight: 700; color: var(--text); white-space: nowrap; }
+.m-live-dot {
+  position: absolute; top: 2px; right: 2px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--live); border: 1.5px solid #fff;
 }
 
 /* ── DATE TABS ── */
-.date-tabs { display:flex; gap:6px; margin-bottom:14px; overflow-x:auto; scrollbar-width:none; padding-bottom:2px; }
-.date-tabs::-webkit-scrollbar { display:none; }
-.date-tab {
-  flex-shrink:0; min-width:52px; padding:7px 10px;
-  background:var(--surface); border:1.5px solid var(--border);
-  border-radius:var(--radius-sm); cursor:pointer; text-align:center;
-  transition:all .15s;
+.date-tabs {
+  display: flex; gap: 6px; overflow-x: auto;
+  padding-bottom: 2px; scrollbar-width: none; margin-bottom: 16px;
 }
-.date-tab:hover { border-color:var(--accent); }
-.date-tab.active { background:var(--accent); border-color:var(--accent); color:#fff; }
-.date-tab .weekday { font-size:.68rem; font-weight:600; color:var(--muted2); }
-.date-tab.active .weekday { color:rgba(255,255,255,.75); }
-.date-tab .day { font-size:.82rem; font-weight:700; }
+.date-tabs::-webkit-scrollbar { display: none; }
+.d-tab {
+  flex-shrink: 0; padding: 7px 13px; text-align: center;
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 10px; cursor: pointer; transition: all .15s;
+}
+.d-tab:hover { border-color: var(--purple); }
+.d-tab.on { background: var(--purple); border-color: var(--purple); color: #fff; }
+.d-tab .wd { font-size: .68rem; font-weight: 600; color: var(--muted); }
+.d-tab.on .wd { color: rgba(255,255,255,.75); }
+.d-tab .dd { font-size: .9rem; font-weight: 700; margin-top: 1px; }
 
-/* ── SCHEDULE CARDS ── */
-.schedule-list { display:flex; flex-direction:column; gap:8px; }
-.schedule-card {
-  display:flex; align-items:center; gap:12px; padding:12px 14px;
-  background:var(--surface); border:1.5px solid var(--border);
-  border-left:3px solid var(--card-color,var(--accent));
-  border-radius:var(--radius); text-decoration:none; color:var(--text);
-  transition:all .15s; position:relative; overflow:hidden;
+/* ── FILTER STATUS ── */
+.filter-bar {
+  display: none; align-items: center; gap: 8px;
+  padding: 7px 12px; background: var(--purple-lt);
+  border-radius: 8px; margin-bottom: 12px;
+  font-size: .78rem; color: var(--purple-dk); font-weight: 600;
 }
-.schedule-card:hover { box-shadow:var(--shadow); transform:translateX(2px); border-color:var(--card-color,var(--accent)); }
-.schedule-card.is-live { background: linear-gradient(90deg, #fef2f2 0%, var(--surface) 100%); border-left-color:var(--live); }
-.card-avatar {
-  width:40px; height:40px; border-radius:50%; flex-shrink:0; overflow:hidden;
-  background:color-mix(in srgb, var(--card-color,var(--accent)) 15%, #fff);
-  display:flex; align-items:center; justify-content:center;
-  font-size:1rem; font-weight:700; color:var(--card-color,var(--accent));
+.filter-bar.show { display: flex; }
+.filter-bar button {
+  margin-left: auto; background: none; border: none;
+  color: var(--purple); cursor: pointer; font-size: .78rem; font-weight: 700;
 }
-.card-avatar img { width:100%; height:100%; object-fit:cover; }
-.card-info { flex:1; min-width:0; }
-.card-member { font-size:.75rem; font-weight:700; color:var(--text2); display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:3px; }
-.card-title { font-size:.82rem; color:var(--muted2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.card-time { text-align:right; flex-shrink:0; }
-.card-time .time { font-family:'Rajdhani',sans-serif; font-size:1.05rem; font-weight:700; color:var(--accent); }
-.card-time .date-label { font-size:.65rem; color:var(--muted2); }
-.platform-badge {
-  font-size:.62rem; font-weight:700; padding:2px 6px; border-radius:4px; letter-spacing:.04em;
-}
-.platform-badge.youtube { background:#fee2e2; color:var(--yt); }
-.platform-badge.twitch  { background:#ede9fe; color:var(--twitch); }
-.platform-badge.live-now { background:var(--live); color:#fff; animation:blink 1.5s infinite; }
-.empty { text-align:center; padding:48px 20px; color:var(--muted2); }
-.empty-icon { font-size:2.5rem; margin-bottom:10px; }
-.empty-text { font-size:.85rem; }
 
-/* ── STATS MONTH CONTROL ── */
-.month-control { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
-.month-nav {
-  width:32px; height:32px; border-radius:8px; border:1.5px solid var(--border);
-  background:var(--surface); color:var(--accent); font-size:1.1rem;
-  cursor:pointer; display:flex; align-items:center; justify-content:center;
-  transition:all .15s; font-weight:700;
-}
-.month-nav:hover { background:var(--accent); color:#fff; border-color:var(--accent); }
-.month-label { font-size:.95rem; font-weight:700; color:var(--text); }
+/* ── SCHEDULE LIST ── */
+.schedule-list { display: flex; flex-direction: column; gap: 7px; }
 
-/* ── STATS MEMBER TABS ── */
-.stats-member-tabs {
-  display:flex; gap:6px; overflow-x:auto; margin-bottom:18px;
-  padding-bottom:4px; scrollbar-width:none;
+.s-card {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 14px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-left: 3.5px solid var(--member-color, var(--purple));
+  border-radius: 10px;
+  text-decoration: none; color: inherit;
+  transition: all .14s;
 }
-.stats-member-tabs::-webkit-scrollbar { display:none; }
-.smt-btn {
-  flex-shrink:0; display:flex; align-items:center; gap:6px; padding:6px 12px;
-  background:var(--surface); border:1.5px solid var(--border); border-radius:20px;
-  cursor:pointer; font-size:.75rem; font-weight:600; color:var(--muted2);
-  transition:all .15s;
-}
-.smt-btn:hover { border-color:var(--accent); color:var(--accent); }
-.smt-btn.active { background:var(--accent); border-color:var(--accent); color:#fff; }
-.smt-avatar {
-  width:22px; height:22px; border-radius:50%; overflow:hidden;
-  background:var(--accent-lt); display:flex; align-items:center; justify-content:center;
-  font-size:.7rem; font-weight:700; flex-shrink:0;
-}
-.smt-avatar img { width:100%; height:100%; object-fit:cover; }
+.s-card:hover { box-shadow: 0 2px 12px rgba(124,58,237,.1); transform: translateX(2px); }
+.s-card.is-live { background: linear-gradient(90deg, #fff5f5 0%, #fff 60%); border-left-color: var(--live); }
 
-/* ── SUMMARY CARDS ── */
-.stats-summary { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:18px; }
-@media(min-width:560px) { .stats-summary { grid-template-columns:repeat(4,1fr); } }
-.summary-card {
-  background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius);
-  padding:14px; position:relative; overflow:hidden;
+.s-avatar {
+  width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0;
+  overflow: hidden; background: color-mix(in srgb, var(--member-color, var(--purple)) 14%, #fff);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; font-weight: 700; color: var(--member-color, var(--purple));
+  border: 1.5px solid color-mix(in srgb, var(--member-color, var(--purple)) 30%, #fff);
 }
-.summary-card::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:3px;
-  background: var(--card-accent, var(--accent));
-}
-.summary-label { font-size:.68rem; font-weight:600; color:var(--muted2); margin-bottom:6px; }
-.summary-value { font-family:'Rajdhani',sans-serif; font-size:1.6rem; font-weight:700; color:var(--text); line-height:1; }
-.summary-sub { font-size:.68rem; color:var(--muted2); margin-top:3px; }
+.s-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-/* ── CHART ── */
-.chart-wrap {
-  background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius);
-  padding:16px; margin-bottom:16px;
+.s-body { flex: 1; min-width: 0; }
+.s-top { display: flex; align-items: center; gap: 7px; margin-bottom: 3px; flex-wrap: wrap; }
+.s-name { font-size: .8rem; font-weight: 700; color: var(--purple-dk); }
+.s-badge {
+  font-size: .62rem; font-weight: 700; padding: 2px 6px; border-radius: 5px;
 }
-.chart-title { font-size:.78rem; font-weight:700; color:var(--text2); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
-.chart-canvas-wrap { position:relative; height:200px; }
+.s-badge.yt     { background: #fee2e2; color: #b91c1c; }
+.s-badge.tw     { background: var(--purple-lt); color: var(--purple); }
+.s-badge.live   { background: var(--live); color: #fff; animation: blink 1.4s infinite; }
+.s-title { font-size: .82rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-/* ── RANKING ── */
-.ranking-grid { display:grid; grid-template-columns:1fr; gap:12px; margin-bottom:16px; }
-@media(min-width:680px) { .ranking-grid { grid-template-columns:1fr 1fr; } }
-.ranking-card {
-  background:var(--surface); border:1.5px solid var(--border);
-  border-radius:var(--radius); padding:14px;
-}
-.ranking-card-title { font-size:.75rem; font-weight:700; color:var(--text2); margin-bottom:10px; }
-.rank-row { display:flex; align-items:center; gap:8px; margin-bottom:7px; }
-.rank-num {
-  width:20px; height:20px; border-radius:50%; display:flex; align-items:center;
-  justify-content:center; font-size:.68rem; font-weight:700; flex-shrink:0;
-  background:var(--bg2); color:var(--muted2);
-}
-.rank-num.gold   { background:#fef9c3; color:#854d0e; }
-.rank-num.silver { background:#f1f5f9; color:#475569; }
-.rank-num.bronze { background:#fff7ed; color:#9a3412; }
-.rank-avatar {
-  width:24px; height:24px; border-radius:50%; overflow:hidden; flex-shrink:0;
-  background:var(--bg2); display:flex; align-items:center; justify-content:center;
-  font-size:.72rem; font-weight:700;
-}
-.rank-avatar img { width:100%; height:100%; object-fit:cover; }
-.rank-name { font-size:.72rem; font-weight:600; color:var(--text); width:72px; flex-shrink:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.rank-bar-wrap { flex:1; }
-.rank-bar-bg { background:var(--bg2); border-radius:4px; height:7px; overflow:hidden; }
-.rank-bar-fill { height:100%; border-radius:4px; background:var(--bar-color,var(--accent)); transition:width .6s ease; }
-.rank-value { font-size:.7rem; font-weight:700; color:var(--muted2); width:44px; text-align:right; flex-shrink:0; }
+.s-time { flex-shrink: 0; text-align: right; }
+.s-time .hm { font-family: 'DM Sans', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--purple); line-height: 1; }
+.s-time .dur { font-size: .65rem; color: var(--muted); margin-top: 2px; }
 
-/* ── HEATMAP ── */
-.heatmap-wrap { background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:14px; margin-bottom:16px; }
-.heatmap-title { font-size:.75rem; font-weight:700; color:var(--text2); margin-bottom:10px; }
-.heatmap-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
-.heatmap-day-label { text-align:center; font-size:.62rem; color:var(--muted2); font-weight:600; padding-bottom:2px; }
-.heatmap-cell {
-  aspect-ratio:1; border-radius:4px; background:var(--bg2);
-  display:flex; align-items:center; justify-content:center;
-  font-size:.6rem; color:var(--muted2); cursor:default; transition:all .15s;
+/* ── EMPTY ── */
+.empty {
+  text-align: center; padding: 52px 16px; color: var(--muted);
 }
-.heatmap-cell.empty-cell { background:transparent; }
-.heatmap-cell[data-level="1"] { background:#ddd6fe; color:var(--text2); }
-.heatmap-cell[data-level="2"] { background:#a78bfa; color:#fff; }
-.heatmap-cell[data-level="3"] { background:#7c3aed; color:#fff; }
-.heatmap-cell[data-level="4"] { background:#4c1d95; color:#fff; }
-.heatmap-cell.today-cell { outline:2px solid var(--accent); outline-offset:1px; }
+.empty-icon { font-size: 2.2rem; margin-bottom: 10px; }
+.empty-text { font-size: .85rem; }
 
-/* ── PLATFORM BARS ── */
-.platform-breakdown { background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:14px; margin-bottom:16px; }
-.platform-breakdown-title { font-size:.75rem; font-weight:700; color:var(--text2); margin-bottom:10px; }
-.platform-row { margin-bottom:10px; }
-.platform-row-header { display:flex; justify-content:space-between; margin-bottom:4px; }
-.platform-name { font-size:.72rem; font-weight:700; }
-.platform-pct { font-size:.72rem; color:var(--muted2); }
-.platform-full-bar { background:var(--bg2); border-radius:4px; height:8px; overflow:hidden; }
-.platform-full-fill { height:100%; border-radius:4px; transition:width .6s ease; }
-
-/* ── MEMBER DETAIL PANEL ── */
-.member-detail-panel {
-  background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius);
-  padding:16px; margin-bottom:16px;
-  display:none;
+/* ── BOTTOM NAV (mobile) ── */
+.bottom-nav {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255,255,255,.97);
+  backdrop-filter: blur(12px);
+  border-top: 1.5px solid var(--border);
+  padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+  justify-content: space-around;
 }
-.member-detail-panel.open { display:block; }
-.mdp-header { display:flex; align-items:center; gap:14px; margin-bottom:16px; padding-bottom:14px; border-bottom:1px solid var(--border); }
-.mdp-avatar {
-  width:60px; height:60px; border-radius:50%; overflow:hidden;
-  border:2.5px solid var(--member-color, var(--accent));
-  flex-shrink:0; background:var(--bg2);
-  display:flex; align-items:center; justify-content:center; font-size:1.5rem; font-weight:700;
+.bn-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  background: none; border: none; cursor: pointer;
+  color: var(--muted); font-size: .68rem; font-weight: 600;
+  padding: 4px 16px; transition: color .15s;
 }
-.mdp-avatar img { width:100%; height:100%; object-fit:cover; }
-.mdp-info { flex:1; min-width:0; }
-.mdp-name { font-size:1.05rem; font-weight:900; color:var(--text); }
-.mdp-en { font-size:.72rem; color:var(--muted2); }
-.mdp-close {
-  width:28px; height:28px; border-radius:50%; border:1.5px solid var(--border);
-  background:var(--bg2); cursor:pointer; display:flex; align-items:center; justify-content:center;
-  font-size:.9rem; color:var(--muted2); transition:all .15s;
-}
-.mdp-close:hover { background:var(--accent); color:#fff; border-color:var(--accent); }
-.mdp-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:14px; }
-.mdp-stat { text-align:center; padding:10px 6px; background:var(--bg); border-radius:var(--radius-sm); }
-.mdp-stat-val { font-family:'Rajdhani',sans-serif; font-size:1.3rem; font-weight:700; color:var(--member-color, var(--accent)); }
-.mdp-stat-label { font-size:.62rem; color:var(--muted2); }
-.mdp-sub-chart { position:relative; height:140px; margin-bottom:14px; }
-.mdp-sub-title { font-size:.72rem; font-weight:700; color:var(--text2); margin-bottom:8px; }
-
-/* ── SUBSCRIBER CHART ── */
-.sub-chart-section { background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:14px; margin-bottom:16px; }
-.sub-chart-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px; }
-.sub-chart-title { font-size:.78rem; font-weight:700; color:var(--text2); }
-.sub-chart-toggle { display:flex; gap:4px; }
-.sct-btn {
-  padding:3px 10px; border-radius:12px; border:1.5px solid var(--border);
-  background:var(--bg2); color:var(--muted2); font-size:.68rem; font-weight:600;
-  cursor:pointer; transition:all .15s;
-}
-.sct-btn.active { background:var(--accent); border-color:var(--accent); color:#fff; }
-.sub-chart-canvas-wrap { position:relative; height:220px; }
+.bn-btn .ico { font-size: 1.35rem; }
+.bn-btn.on { color: var(--purple); }
 
 /* ── FOOTER ── */
 footer {
-  text-align:center; padding:20px; font-size:.72rem; color:var(--muted2);
-  border-top:1px solid var(--border); background:var(--surface);
-  display:flex; align-items:center; justify-content:center; gap:12px; flex-wrap:wrap;
+  border-top: 1.5px solid var(--border);
+  padding: 14px 16px; text-align: center;
+  font-size: .72rem; color: var(--muted);
+  display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;
 }
-.update-dot { display:inline-block; width:6px; height:6px; border-radius:50%; background:#22c55e; margin-right:4px; vertical-align:middle; }
+.upd-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #22c55e; vertical-align: middle; margin-right: 3px; }
 
 /* ── RESPONSIVE ── */
-@media(max-width:600px) {
-  header { padding:0 12px; height:52px; }
-  .logo-sub { display:none; }
-  nav { display:none; }
-  .mobile-nav { display:block; }
-  main { padding:14px 12px 80px; }
-  .members-grid { grid-template-columns: repeat(auto-fill, minmax(62px, 1fr)); gap:8px; }
-  .member-avatar { width:38px; height:38px; }
-  .date-tab { min-width:46px; padding:6px 8px; }
-  .stats-summary { grid-template-columns:repeat(2,1fr); gap:8px; }
-  .summary-value { font-size:1.35rem; }
-  .mdp-stats { grid-template-columns:repeat(3,1fr); }
-  .section-title { font-size:.72rem; }
-  .schedule-card { padding:10px 10px; gap:8px; }
-  .card-avatar { width:34px; height:34px; }
-}
-@media(max-width:360px) {
-  .members-grid { grid-template-columns: repeat(auto-fill, minmax(54px, 1fr)); gap:6px; }
-  .member-avatar { width:34px; height:34px; }
+@media (max-width: 600px) {
+  header nav { display: none; }
+  .bottom-nav { display: flex; }
+  main { padding: 14px 10px 84px; }
+  .s-card { padding: 10px 10px; gap: 9px; }
+  .s-avatar { width: 36px; height: 36px; }
+  .s-time .hm { font-size: .95rem; }
 }
 </style>
 </head>
 <body>
 
-<div id="loadingScreen">
-  <div class="loader-ring"></div>
-  <div style="font-size:.82rem;color:#7c3aed;font-weight:600">読み込み中…</div>
+<!-- LOADING -->
+<div id="loading">
+  <div class="spin"></div>
+  <div style="font-size:.8rem;color:var(--purple);font-weight:600">読み込み中…</div>
 </div>
 
+<!-- HEADER -->
 <header>
   <div class="logo">
-    <div class="logo-icon">⚡</div>
-    <div>
-      <div class="logo-text">VSPO!</div>
-      <div class="logo-sub">Fan Schedule</div>
-    </div>
+    <div class="logo-dot">⚡</div>
+    <span>Vspo! Schedule</span>
   </div>
-  <div class="header-right">
-    <nav>
-      <button class="nav-btn active" onclick="showView('schedule',this)" data-view="schedule">スケジュール</button>
-      <button class="nav-btn"        onclick="showView('stats',this)"    data-view="stats">統計</button>
-    </nav>
-    <div class="lang-switch">
-      <button class="lang-btn active" onclick="setLang('ja')">JP</button>
-      <button class="lang-btn"        onclick="setLang('en')">EN</button>
-    </div>
+  <div class="lang-row">
+    <button class="lang-btn on" onclick="setLang('ja')">JP</button>
+    <button class="lang-btn"   onclick="setLang('en')">EN</button>
   </div>
 </header>
 
-<div class="mobile-nav">
-  <div class="mobile-nav-inner">
-    <button class="mobile-nav-btn active" onclick="showView('schedule',this)" data-view="schedule">
-      <span class="mnb-icon">📅</span><span>スケジュール</span>
-    </button>
-    <button class="mobile-nav-btn" onclick="showView('stats',this)" data-view="stats">
-      <span class="mnb-icon">📊</span><span>統計</span>
-    </button>
-    <button class="mobile-nav-btn" onclick="setLang(lang==='ja'?'en':'ja')">
-      <span class="mnb-icon">🌐</span><span id="mobileLangLabel">EN</span>
-    </button>
-  </div>
+<!-- LIVE BAR -->
+<div class="live-bar" id="liveBar">
+  <div class="live-pill">LIVE</div>
+  <div class="live-names" id="liveNames"></div>
 </div>
 
-<div class="live-banner" id="liveBanner" style="display:none">
-  <div class="live-dot"></div>
-  <span class="live-label">LIVE</span>
-  <div class="live-items" id="liveItems"></div>
-</div>
-
+<!-- MAIN -->
 <main>
-  <!-- ① メンバー＆スケジュール -->
-  <section id="schedule-view">
-    <div class="section-header">
-      <div class="section-title" data-ja="メンバー" data-en="Members">メンバー</div>
-      <div class="section-line"></div>
-    </div>
-    <div class="members-grid" id="membersGrid"></div>
+  <!-- メンバー横スクロール -->
+  <div class="members-row" id="membersRow"></div>
 
-    <div class="section-header" style="margin-top:24px">
-      <div class="section-title" data-ja="配信スケジュール" data-en="Stream Schedule">配信スケジュール</div>
-      <div class="section-line"></div>
-    </div>
-    <div class="date-tabs" id="dateTabs"></div>
-    <div class="schedule-list" id="scheduleList"></div>
-  </section>
+  <!-- フィルター中表示 -->
+  <div class="filter-bar" id="filterBar">
+    <span id="filterLabel"></span>
+    <button onclick="clearFilter()">✕ 解除</button>
+  </div>
 
-  <!-- ② 統計 -->
-  <section id="stats-view" style="display:none">
-    <div class="section-header">
-      <div class="section-title" data-ja="月間統計" data-en="Monthly Stats">月間統計</div>
-      <div class="section-line"></div>
-    </div>
+  <!-- 日付タブ -->
+  <div class="date-tabs" id="dateTabs"></div>
 
-    <!-- 月ナビ＆メンバー選択 -->
-    <div style="display:flex;align-items:center;gap:16px;margin-bottom:12px;flex-wrap:wrap;">
-      <div class="month-control" style="margin-bottom:0">
-        <button class="month-nav" onclick="changeMonth(-1)">‹</button>
-        <div class="month-label" id="monthLabel">—</div>
-        <button class="month-nav" onclick="changeMonth(1)">›</button>
-      </div>
-    </div>
-
-    <!-- メンバータブ（全体＋個別） -->
-    <div class="stats-member-tabs" id="statsMemberTabs"></div>
-
-    <!-- 個別メンバーパネル -->
-    <div class="member-detail-panel" id="memberDetailPanel">
-      <div class="mdp-header">
-        <div class="mdp-avatar" id="mdpAvatar"></div>
-        <div class="mdp-info">
-          <div class="mdp-name" id="mdpName">—</div>
-          <div class="mdp-en" id="mdpEn">—</div>
-        </div>
-        <button class="mdp-close" onclick="selectStatsMember(null)">✕</button>
-      </div>
-      <div class="mdp-stats">
-        <div class="mdp-stat"><div class="mdp-stat-val" id="mdpCount">—</div><div class="mdp-stat-label" data-ja="配信回数" data-en="Streams">配信回数</div></div>
-        <div class="mdp-stat"><div class="mdp-stat-val" id="mdpHours">—</div><div class="mdp-stat-label" data-ja="配信時間" data-en="Hours">配信時間</div></div>
-        <div class="mdp-stat"><div class="mdp-stat-val" id="mdpAvg">—</div><div class="mdp-stat-label" data-ja="平均時間" data-en="Avg">平均時間</div></div>
-      </div>
-      <div class="mdp-sub-title" data-ja="この月の日別配信時間" data-en="Daily stream hours this month">この月の日別配信時間</div>
-      <div class="mdp-sub-chart"><canvas id="mdpChart"></canvas></div>
-    </div>
-
-    <!-- 全体サマリー -->
-    <div class="stats-summary">
-      <div class="summary-card" style="--card-accent:#7c3aed">
-        <div class="summary-label" data-ja="総配信回数" data-en="Total Streams">総配信回数</div>
-        <div class="summary-value" id="stat-count">—</div>
-        <div class="summary-sub" id="stat-count-sub"></div>
-      </div>
-      <div class="summary-card" style="--card-accent:#a855f7">
-        <div class="summary-label" data-ja="総配信時間" data-en="Total Hours">総配信時間</div>
-        <div class="summary-value" id="stat-hours">—</div>
-        <div class="summary-sub" id="stat-hours-sub"></div>
-      </div>
-      <div class="summary-card" style="--card-accent:#6d28d9">
-        <div class="summary-label" data-ja="平均配信時間" data-en="Avg. Duration">平均配信時間</div>
-        <div class="summary-value" id="stat-avg">—</div>
-        <div class="summary-sub" id="stat-avg-sub"></div>
-      </div>
-      <div class="summary-card" style="--card-accent:#8b5cf6">
-        <div class="summary-label" data-ja="配信があった日数" data-en="Active Days">配信があった日数</div>
-        <div class="summary-value" id="stat-days">—</div>
-        <div class="summary-sub" id="stat-days-sub"></div>
-      </div>
-    </div>
-
-    <!-- チャンネル登録者グラフ -->
-    <div class="sub-chart-section">
-      <div class="sub-chart-header">
-        <div class="sub-chart-title" data-ja="📈 チャンネル登録者数推移" data-en="📈 Subscriber Growth">📈 チャンネル登録者数推移</div>
-        <div class="sub-chart-toggle">
-          <button class="sct-btn active" onclick="setSubChartMode('top10',this)">Top10</button>
-          <button class="sct-btn" onclick="setSubChartMode('selected',this)" id="selectedSubBtn" style="display:none">選択中</button>
-        </div>
-      </div>
-      <div class="sub-chart-canvas-wrap"><canvas id="subChart"></canvas></div>
-    </div>
-
-    <!-- ランキング -->
-    <div class="ranking-grid">
-      <div class="ranking-card">
-        <div class="ranking-card-title" data-ja="⏱ 配信時間ランキング" data-en="⏱ Stream Hours Ranking">⏱ 配信時間ランキング</div>
-        <div id="rankHours"></div>
-      </div>
-      <div class="ranking-card">
-        <div class="ranking-card-title" data-ja="📺 配信回数ランキング" data-en="📺 Stream Count Ranking">📺 配信回数ランキング</div>
-        <div id="rankCount"></div>
-      </div>
-    </div>
-
-    <!-- ヒートマップ -->
-    <div class="heatmap-wrap">
-      <div class="heatmap-title" data-ja="📅 配信カレンダー" data-en="📅 Stream Calendar">📅 配信カレンダー</div>
-      <div class="heatmap-grid" id="heatmapGrid"></div>
-    </div>
-
-    <!-- プラットフォーム内訳 -->
-    <div class="platform-breakdown">
-      <div class="platform-breakdown-title" data-ja="🎮 プラットフォーム内訳" data-en="🎮 Platform Breakdown">🎮 プラットフォーム内訳</div>
-      <div id="platformBars"></div>
-    </div>
-
-    <!-- 月別推移チャート -->
-    <div class="chart-wrap">
-      <div class="chart-title" data-ja="📊 月別配信回数推移（過去12ヶ月）" data-en="📊 Monthly Streams (Past 12mo)">📊 月別配信回数推移（過去12ヶ月）</div>
-      <div class="chart-canvas-wrap"><canvas id="monthlyChart"></canvas></div>
-    </div>
-  </section>
+  <!-- スケジュール -->
+  <div class="schedule-list" id="scheduleList"></div>
 </main>
 
+<!-- FOOTER -->
 <footer>
-  <div>© 2026 Vspo! Schedule — 非公式ファンサイト / Unofficial Fan Site</div>
-  <div><span class="update-dot"></span><span id="updateTime">—</span></div>
+  <span>© 2026 非公式ファンサイト</span>
+  <span><span class="upd-dot"></span><span id="updTime">—</span></span>
 </footer>
 
+<!-- BOTTOM NAV -->
+<div class="bottom-nav" id="bottomNav">
+  <button class="bn-btn on" id="bnHome" onclick="scrollToTop()">
+    <span class="ico">📅</span><span>スケジュール</span>
+  </button>
+  <button class="bn-btn" onclick="toggleLang()">
+    <span class="ico">🌐</span><span id="bnLangLabel">EN</span>
+  </button>
+</div>
+
 <script>
-// ============================================================
-// メンバーデータ（全25人）
-// ============================================================
+// ─────────────────────────────────────────────
+// メンバーデータ
+// ─────────────────────────────────────────────
 const MEMBERS = [
-  { id:'sumire',  nameJa:'花芽すみれ',   nameEn:'Kaga Sumire',       channelId:'UCyLGcqYs7RsBb3L0SJfzGYA', color:'#ec4899' },
-  { id:'nazuna',  nameJa:'花芽なずな',   nameEn:'Kaga Nazuna',       channelId:'UCiMG6VdScBabPhJ1ZtaVmbw', color:'#8b5cf6' },
-  { id:'toto',    nameJa:'小雀とと',     nameEn:'Kogara Toto',       channelId:'UCgTzsBI0DIRopMylJEDqnog', color:'#f97316' },
-  { id:'uruha',   nameJa:'一ノ瀬うるは', nameEn:'Ichinose Uruha',    channelId:'UC5LyYg6cCA4yHEYvtUsir3g', color:'#db2777' },
-  { id:'noah',    nameJa:'胡桃のあ',     nameEn:'Kurumi Noah',       channelId:'UCIcAj6WkJ8vZ7DeJVgmeqKw', color:'#059669' },
-  { id:'mimi',    nameJa:'兎咲ミミ',     nameEn:'Tosaki Mimi',       channelId:'UCnvVG9RbOW3J6Ifqo-zKLiw', color:'#f472b6' },
-  { id:'sena',    nameJa:'空澄セナ',     nameEn:'Asumi Sena',        channelId:'UCF_U2GCKHvDz52jWdizppIA', color:'#3b82f6' },
-  { id:'hinano',  nameJa:'橘ひなの',     nameEn:'Tachibana Hinano',  channelId:'UCvUc0m317LWTTPZoBQV479A', color:'#d97706' },
-  { id:'lisa',    nameJa:'英リサ',       nameEn:'Hanabusa Lisa',     channelId:'UCurEA8YoqFwimJcAuSHU0MQ', color:'#7c3aed' },
-  { id:'ren',     nameJa:'如月れん',     nameEn:'Kisaragi Ren',      channelId:'UCGWa1dMU_sDCaRQjdabsVgg', color:'#0ea5e9' },
-  { id:'kyupi',   nameJa:'神成きゅぴ',   nameEn:'Kaminari Qpi',      channelId:'UCMp55EbT_ZlqiMS3lCj01BQ', color:'#ca8a04' },
-  { id:'beni',    nameJa:'八雲べに',     nameEn:'Yakumo Beni',       channelId:'UCjXBuHmWkieBApgBhDuJMMQ', color:'#dc2626' },
-  { id:'ema',     nameJa:'藍沢エマ',     nameEn:'Aizawa Ema',        channelId:'UCPkKpOHxEDcwmUAnRpIu-5A', color:'#10b981' },
-  { id:'runa',    nameJa:'紫宮るな',     nameEn:'Shinomiya Runa',    channelId:'UCD5W21JqNMv_tV9nfjvF9sw', color:'#6366f1' },
-  { id:'tuna',    nameJa:'猫汰つな',     nameEn:'Nekota Tsuna',      channelId:'UCIjdfjcSaEgdjwbgjxC3ZWg', color:'#f87171' },
-  { id:'ramune',  nameJa:'白波らむね',   nameEn:'Shiranami Ramune',  channelId:'UC61OwuYOVuKkpKnid-43Twg', color:'#4ade80' },
-  { id:'meto',    nameJa:'小森めと',     nameEn:'Komori Met',        channelId:'UCzUNASdzI4PV5SlqtYwAkKQ', color:'#a78bfa' },
-  { id:'akari',   nameJa:'夢野あかり',   nameEn:'Yumeno Akari',      channelId:'UCS5l_Y0oMVTjEos2LuyeSZQ', color:'#fbbf24' },
-  { id:'kuromu',  nameJa:'夜乃くろむ',   nameEn:'Yano Kuromu',       channelId:'UCX4WL24YEOUYd7qDsFSLDOw', color:'#818cf8' },
-  { id:'kokage',  nameJa:'紡木こかげ',   nameEn:'Tsumugi Kokage',    channelId:'UC-WX1CXssCtCtc2TNIRnJzg', color:'#2dd4bf' },
-  { id:'yuuhi',   nameJa:'千燈ゆうひ',   nameEn:'Sendo Yuuhi',       channelId:'UCuDY3ibSP2MFRgf7eo3cojg', color:'#fb7185' },
-  { id:'hanabi',  nameJa:'蝶屋はなび',   nameEn:'Choya Hanabi',      channelId:'UCL9hJsdk9eQa0IlWbFB2oRg', color:'#fb923c' },
-  { id:'moka',    nameJa:'甘結もか',     nameEn:'Amayui Moka',       channelId:'UC8vKBjGY2HVfbW9GAmgikWw', color:'#38bdf8' },
-  { id:'saine',   nameJa:'銀城サイネ',   nameEn:'Ginjo Saine',       channelId:'UC2xXx1m1jeL0W84_0jTg-Yw', color:'#86efac' },
-  { id:'chise',   nameJa:'龍巻ちせ',     nameEn:'Tatsumaki Chise',   channelId:'UCoW8qQy80mKH0RJTKAKKhg',  color:'#d8b4fe' },
+  { id:'sumire',  ja:'花芽すみれ',   en:'Kaga Sumire',       ch:'UCyLGcqYs7RsBb3L0SJfzGYA', tw:'kagasumire',   color:'#ec4899' },
+  { id:'nazuna',  ja:'花芽なずな',   en:'Kaga Nazuna',       ch:'UCiMG6VdScBabPhJ1ZtaVmbw', tw:'nazunalive',   color:'#8b5cf6' },
+  { id:'toto',    ja:'小雀とと',     en:'Kogara Toto',       ch:'UCgTzsBI0DIRopMylJEDqnog', tw:'',             color:'#f97316' },
+  { id:'uruha',   ja:'一ノ瀬うるは', en:'Ichinose Uruha',    ch:'UC5LyYg6cCA4yHEYvtUsir3g', tw:'ichinose_uruha',color:'#db2777' },
+  { id:'noah',    ja:'胡桃のあ',     en:'Kurumi Noah',       ch:'UCIcAj6WkJ8vZ7DeJVgmeqKw', tw:'963noah',      color:'#059669' },
+  { id:'mimi',    ja:'兎咲ミミ',     en:'Tosaki Mimi',       ch:'UCnvVG9RbOW3J6Ifqo-zKLiw', tw:'',             color:'#f472b6' },
+  { id:'sena',    ja:'空澄セナ',     en:'Asumi Sena',        ch:'UCF_U2GCKHvDz52jWdizppIA', tw:'kasumisena',   color:'#3b82f6' },
+  { id:'hinano',  ja:'橘ひなの',     en:'Tachibana Hinano',  ch:'UCvUc0m317LWTTPZoBQV479A', tw:'hinano_vspo',  color:'#d97706' },
+  { id:'lisa',    ja:'英リサ',       en:'Hanabusa Lisa',     ch:'UCurEA8YoqFwimJcAuSHU0MQ', tw:'lisahanabusa', color:'#7c3aed' },
+  { id:'ren',     ja:'如月れん',     en:'Kisaragi Ren',      ch:'UCGWa1dMU_sDCaRQjdabsVgg', tw:'ren_vspo',     color:'#0ea5e9' },
+  { id:'kyupi',   ja:'神成きゅぴ',   en:'Kaminari Qpi',      ch:'UCMp55EbT_ZlqiMS3lCj01BQ', tw:'kyupi_vspo',   color:'#ca8a04' },
+  { id:'beni',    ja:'八雲べに',     en:'Yakumo Beni',       ch:'UCjXBuHmWkieBApgBhDuJMMQ', tw:'',             color:'#dc2626' },
+  { id:'ema',     ja:'藍沢エマ',     en:'Aizawa Ema',        ch:'UCPkKpOHxEDcwmUAnRpIu-5A', tw:'aizawa_ema',   color:'#10b981' },
+  { id:'runa',    ja:'紫宮るな',     en:'Shinomiya Runa',    ch:'UCD5W21JqNMv_tV9nfjvF9sw', tw:'runa_vspo',    color:'#6366f1' },
+  { id:'tuna',    ja:'猫汰つな',     en:'Nekota Tsuna',      ch:'UCIjdfjcSaEgdjwbgjxC3ZWg', tw:'nekota_tsuna', color:'#f87171' },
+  { id:'ramune',  ja:'白波らむね',   en:'Shiranami Ramune',  ch:'UC61OwuYOVuKkpKnid-43Twg', tw:'ramune_vspo',  color:'#22c55e' },
+  { id:'meto',    ja:'小森めと',     en:'Komori Met',        ch:'UCzUNASdzI4PV5SlqtYwAkKQ', tw:'meto_vspo',    color:'#a78bfa' },
+  { id:'akari',   ja:'夢野あかり',   en:'Yumeno Akari',      ch:'UCS5l_Y0oMVTjEos2LuyeSZQ', tw:'akari_vspo',   color:'#fbbf24' },
+  { id:'kuromu',  ja:'夜乃くろむ',   en:'Yano Kuromu',       ch:'UCX4WL24YEOUYd7qDsFSLDOw', tw:'kuromu_vspo',  color:'#818cf8' },
+  { id:'kokage',  ja:'紡木こかげ',   en:'Tsumugi Kokage',    ch:'UC-WX1CXssCtCtc2TNIRnJzg', tw:'kokage_tsumugi',color:'#2dd4bf' },
+  { id:'yuuhi',   ja:'千燈ゆうひ',   en:'Sendo Yuuhi',       ch:'UCuDY3ibSP2MFRgf7eo3cojg', tw:'yuuhi_vspo',   color:'#fb7185' },
+  { id:'hanabi',  ja:'蝶屋はなび',   en:'Choya Hanabi',      ch:'UCL9hJsdk9eQa0IlWbFB2oRg', tw:'',             color:'#fb923c' },
+  { id:'moka',    ja:'甘結もか',     en:'Amayui Moka',       ch:'UC8vKBjGY2HVfbW9GAmgikWw', tw:'',             color:'#38bdf8' },
+  { id:'saine',   ja:'銀城サイネ',   en:'Ginjo Saine',       ch:'UC2xXx1m1jeL0W84_0jTg-Yw', tw:'',             color:'#86efac' },
+  { id:'chise',   ja:'龍巻ちせ',     en:'Tatsumaki Chise',   ch:'UCoW8qQy80mKH0RJTKAKKhg',  tw:'',             color:'#d8b4fe' },
 ];
 
-// ============================================================
-// 状態管理
-// ============================================================
-let lang           = 'ja';
-let activeMember   = null;  // スケジュールフィルター用
-let activeDate     = 0;
-let statsYear      = new Date().getFullYear();
-let statsMonth     = new Date().getMonth();
-let statsMemberId  = null;  // 統計メンバー選択
-let subChartMode   = 'top10';
-let SCHEDULE       = [];
-let LIVE           = [];
-let STATS          = {};
-let MEMBER_ICONS   = {};
-let SUBSCRIBER_DATA = {}; // { memberId: [{date:'2024-01', count:123000}, ...] }
-const today        = new Date();
-let mdpChartInst   = null;
-let subChartInst   = null;
-let monthlyChartInst = null;
+// ─────────────────────────────────────────────
+// 状態
+// ─────────────────────────────────────────────
+let lang       = 'ja';
+let filterMem  = null;  // 選択中メンバーID
+let activeDay  = 0;     // 0=今日, 1=明日 …
+let SCHEDULE   = [];
+let LIVE       = [];
+let ICONS      = {};    // { memberId: iconUrl }
+const TODAY    = new Date();
 
-// ============================================================
+// ─────────────────────────────────────────────
 // データ取得
-// ============================================================
-async function fetchSchedule() {
-  try { const r = await fetch('schedule.json?t='+Date.now()); SCHEDULE = await r.json(); }
-  catch(e) { SCHEDULE = []; }
-}
-async function fetchLive() {
-  try { const r = await fetch('live.json?t='+Date.now()); LIVE = await r.json(); }
-  catch(e) { LIVE = []; }
-}
-async function fetchStats() {
-  try { const r = await fetch('stats.json?t='+Date.now()); STATS = await r.json(); }
-  catch(e) { STATS = {}; }
-}
-async function fetchMemberIcons() {
-  try {
-    const r = await fetch('members.json?t='+Date.now());
-    if(!r.ok) { console.warn('members.json が見つかりません（status:', r.status, '）'); MEMBER_ICONS={}; return; }
-    const d = await r.json();
-    MEMBER_ICONS = {};
-    // 配列形式: [{id, iconUrl, ...}]
-    if(Array.isArray(d)){
-      d.forEach(m => { if(m.iconUrl) MEMBER_ICONS[m.id] = m.iconUrl; });
-    }
-    // オブジェクト形式: {id: iconUrl} の場合も対応
-    else if(typeof d === 'object'){
-      Object.entries(d).forEach(([id, val]) => {
-        if(typeof val === 'string') MEMBER_ICONS[id] = val;
-        else if(val && val.iconUrl) MEMBER_ICONS[id] = val.iconUrl;
-      });
-    }
-    const loaded = Object.keys(MEMBER_ICONS).length;
-    console.log(`アイコン読み込み完了: ${loaded}人分`);
-    if(loaded === 0) console.warn('members.jsonは存在しますがアイコンURLが取得できませんでした。GASのupdateMemberIcons()を実行してください。');
-  } catch(e) {
-    console.warn('members.json の読み込みエラー:', e);
-    MEMBER_ICONS = {};
-  }
-}
-async function fetchSubscribers() {
-  try {
-    const r = await fetch('subscribers.json?t='+Date.now());
-    SUBSCRIBER_DATA = await r.json();
-  } catch(e) {
-    // subscribers.jsonがなければサンプルデータ（デモ用）
-    SUBSCRIBER_DATA = generateDemoSubscriberData();
-  }
+// ─────────────────────────────────────────────
+async function load() {
+  const safe = (p) => p.catch(() => null);
+  const [sch, lv, mem] = await Promise.all([
+    safe(fetch('schedule.json?t='+Date.now()).then(r=>r.json())),
+    safe(fetch('live.json?t='+Date.now()).then(r=>r.json())),
+    safe(fetch('members.json?t='+Date.now()).then(r=>r.json())),
+  ]);
+  SCHEDULE = Array.isArray(sch) ? sch : [];
+  LIVE     = Array.isArray(lv)  ? lv  : [];
+  if (Array.isArray(mem)) mem.forEach(m => { if (m.iconUrl) ICONS[m.id] = m.iconUrl; });
 }
 
-// デモ用サブスクライバーデータ生成
-function generateDemoSubscriberData() {
-  const data = {};
-  const now = new Date();
-  MEMBERS.forEach(m => {
-    const base = Math.floor(Math.random() * 600000) + 100000;
-    const monthly = [];
-    for (let i = 23; i >= 0; i--) {
-      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
-      const growth = Math.floor(Math.random() * 8000) + 1000;
-      monthly.push({ date: key, count: base + growth * (24 - i) + Math.floor(Math.random() * 5000 - 2500) });
-    }
-    data[m.id] = monthly;
-  });
-  return data;
-}
-
-// ============================================================
+// ─────────────────────────────────────────────
 // 初期化
-// ============================================================
+// ─────────────────────────────────────────────
 async function init() {
-  await Promise.all([fetchSchedule(), fetchLive(), fetchStats(), fetchMemberIcons(), fetchSubscribers()]);
-  document.getElementById('loadingScreen').style.display = 'none';
+  await load();
+  document.getElementById('loading').style.display = 'none';
+  renderAll();
+  setInterval(async () => {
+    const lv = await fetch('live.json?t='+Date.now()).then(r=>r.json()).catch(()=>[]);
+    LIVE = Array.isArray(lv) ? lv : [];
+    renderLiveBar(); renderMembers();
+  }, 5 * 60 * 1000);
+  setInterval(async () => {
+    const sch = await fetch('schedule.json?t='+Date.now()).then(r=>r.json()).catch(()=>[]);
+    SCHEDULE = Array.isArray(sch) ? sch : [];
+    renderSchedule();
+    document.getElementById('updTime').textContent = fmtNow();
+  }, 30 * 60 * 1000);
+}
+
+function renderAll() {
+  renderLiveBar();
   renderMembers();
   renderDateTabs();
   renderSchedule();
-  renderLiveBanner();
-  renderStatsMemberTabs();
-  renderStats();
-  renderSubChart();
-  renderMonthlyChart();
-  updateTime();
-
-  setInterval(async () => { await fetchLive(); renderLiveBanner(); renderMembers(); }, 5*60*1000);
-  setInterval(async () => { await fetchSchedule(); renderSchedule(); updateTime(); }, 30*60*1000);
+  document.getElementById('updTime').textContent = fmtNow();
 }
 
-// ============================================================
-// 言語切り替え
-// ============================================================
+// ─────────────────────────────────────────────
+// 言語
+// ─────────────────────────────────────────────
 function setLang(l) {
   lang = l;
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent.trim() === l.toUpperCase()));
-  document.querySelectorAll('[data-ja]').forEach(el => { el.textContent = l==='ja' ? el.dataset.ja : el.dataset.en; });
-  const ml = document.getElementById('mobileLangLabel');
-  if(ml) ml.textContent = l==='ja' ? 'EN' : 'JP';
-  renderMembers(); renderSchedule(); renderStatsMemberTabs(); renderStats(); renderSubChart(); renderMonthlyChart();
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('on', b.textContent.trim() === l.toUpperCase()));
+  const lbl = document.getElementById('bnLangLabel');
+  if (lbl) lbl.textContent = l === 'ja' ? 'EN' : 'JP';
+  renderAll();
+}
+function toggleLang() { setLang(lang === 'ja' ? 'en' : 'ja'); }
+
+// ─────────────────────────────────────────────
+// Live バー
+// ─────────────────────────────────────────────
+function renderLiveBar() {
+  const bar = document.getElementById('liveBar');
+  if (!LIVE.length) { bar.classList.remove('show'); return; }
+  bar.classList.add('show');
+  document.getElementById('liveNames').innerHTML = LIVE.map(l => {
+    const m = MEMBERS.find(x => x.id === l.memberId);
+    if (!m) return '';
+    const name = lang === 'ja' ? m.ja : m.en;
+    const icon = ICONS[m.id];
+    return `<a class="live-chip" href="${l.url}" target="_blank" rel="noopener">
+      ${icon ? `<img src="${icon}" referrerpolicy="no-referrer" onerror="this.style.display='none'">` : '🔴'}
+      ${name}
+    </a>`;
+  }).join('');
 }
 
-// ============================================================
-// ビュー切り替え
-// ============================================================
-function showView(v, btn) {
-  document.querySelectorAll('.nav-btn,.mobile-nav-btn').forEach(b => {
-    if(b.dataset.view) b.classList.toggle('active', b.dataset.view === v);
-  });
-  document.getElementById('schedule-view').style.display = v==='schedule' ? '' : 'none';
-  document.getElementById('stats-view').style.display    = v==='stats'    ? '' : 'none';
-  if(v==='stats') { renderStatsMemberTabs(); renderStats(); renderSubChart(); renderMonthlyChart(); }
-}
-
-// ============================================================
-// メンバーカード（スケジュールフィルター用）
-// ============================================================
+// ─────────────────────────────────────────────
+// メンバー一覧（横スクロール）
+// ─────────────────────────────────────────────
 function renderMembers() {
-  const liveIds = LIVE.map(l=>l.memberId);
-  document.getElementById('membersGrid').innerHTML = MEMBERS.map(m => {
-    const name = lang==='ja' ? m.nameJa : m.nameEn;
-    const isAct = activeMember === m.id;
-    const isLive = liveIds.includes(m.id);
-    const icon = MEMBER_ICONS[m.id] || '';
-    const ini = m.nameJa.slice(0,1);
-    return `<div class="member-card ${isAct?'active':''}" style="--member-color:${m.color}" onclick="filterMember('${m.id}')">
-      ${isLive ? '<div class="live-badge">LIVE</div>' : ''}
-      <div class="member-avatar">
-        ${icon ? `<img src="${icon}" alt="${name}" referrerpolicy="no-referrer" onerror="this.style.display='none';this.parentNode.dataset.fallback='true'">` : `<span>${ini}</span>`}
-      </div>
-      <div class="member-name">${name}</div>
+  const liveIds = new Set(LIVE.map(l => l.memberId));
+  document.getElementById('membersRow').innerHTML = MEMBERS.map(m => {
+    const name = lang === 'ja' ? m.ja : m.en;
+    const icon = ICONS[m.id];
+    const on   = filterMem === m.id;
+    const live = liveIds.has(m.id);
+    return `<div class="m-chip ${on ? 'on' : ''}" style="--member-color:${m.color}" onclick="toggleFilter('${m.id}','${name}')">
+      ${live ? '<div class="m-live-dot"></div>' : ''}
+      ${icon
+        ? `<img src="${icon}" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`
+        : ''}
+      <div class="m-ini" style="${icon ? 'display:none' : ''}">${m.ja[0]}</div>
+      <span class="m-chip-name">${name}</span>
     </div>`;
   }).join('');
 }
-function filterMember(id) {
-  activeMember = activeMember===id ? null : id;
-  renderMembers(); renderSchedule();
+
+// ─────────────────────────────────────────────
+// フィルター
+// ─────────────────────────────────────────────
+function toggleFilter(id, name) {
+  filterMem = filterMem === id ? null : id;
+  const bar = document.getElementById('filterBar');
+  if (filterMem) {
+    bar.classList.add('show');
+    document.getElementById('filterLabel').textContent = `${name} のスケジュール`;
+  } else {
+    bar.classList.remove('show');
+  }
+  renderMembers();
+  renderSchedule();
+}
+function clearFilter() {
+  filterMem = null;
+  document.getElementById('filterBar').classList.remove('show');
+  renderMembers();
+  renderSchedule();
 }
 
-// ============================================================
+// ─────────────────────────────────────────────
 // 日付タブ
-// ============================================================
-const WD_JA=['日','月','火','水','木','金','土'];
-const WD_EN=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+// ─────────────────────────────────────────────
+const WD_JA = ['日','月','火','水','木','金','土'];
+const WD_EN = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
 function renderDateTabs() {
-  document.getElementById('dateTabs').innerHTML = Array.from({length:7},(_,i)=>{
-    const d=new Date(today); d.setDate(d.getDate()+i);
-    const wd=lang==='ja'?WD_JA[d.getDay()]:WD_EN[d.getDay()];
-    const label=i===0?(lang==='ja'?'今日':'Today'):(i===1?(lang==='ja'?'明日':'Tmrw'):wd);
-    return `<div class="date-tab ${activeDate===i?'active':''}" onclick="setDate(${i})">
-      <div class="weekday">${label}</div>
-      <div class="day">${d.getMonth()+1}/${d.getDate()}</div>
+  document.getElementById('dateTabs').innerHTML = Array.from({length:7}, (_,i) => {
+    const d  = new Date(TODAY);
+    d.setDate(d.getDate() + i);
+    const wd = (lang === 'ja' ? WD_JA : WD_EN)[d.getDay()];
+    const label = i === 0 ? (lang === 'ja' ? '今日' : 'Today')
+                : i === 1 ? (lang === 'ja' ? '明日' : 'Tmrw') : wd;
+    return `<div class="d-tab ${activeDay === i ? 'on' : ''}" onclick="setDay(${i})">
+      <div class="wd">${label}</div>
+      <div class="dd">${d.getMonth()+1}/${d.getDate()}</div>
     </div>`;
   }).join('');
 }
-function setDate(i){ activeDate=i; renderDateTabs(); renderSchedule(); }
+function setDay(i) { activeDay = i; renderDateTabs(); renderSchedule(); }
 
-// ============================================================
+// ─────────────────────────────────────────────
 // スケジュールリスト
-// ============================================================
+// ─────────────────────────────────────────────
 function renderSchedule() {
-  const list=document.getElementById('scheduleList');
-  const tgt=new Date(today); tgt.setDate(tgt.getDate()+activeDate);
-  const allItems=[...LIVE.map(l=>({...l,isLive:true})),...SCHEDULE.filter(s=>!LIVE.find(l=>l.memberId===s.memberId&&l.platform===s.platform))];
-  let items=allItems.filter(s=>{
-    const dt=new Date(s.datetime||s.startedAt);
-    return dt.getFullYear()===tgt.getFullYear()&&dt.getMonth()===tgt.getMonth()&&dt.getDate()===tgt.getDate()
-      &&(!activeMember||s.memberId===activeMember);
-  }).sort((a,b)=>new Date(a.datetime||a.startedAt)-new Date(b.datetime||b.startedAt));
+  const tgt = new Date(TODAY);
+  tgt.setDate(tgt.getDate() + activeDay);
 
-  if(!items.length){
-    list.innerHTML=`<div class="empty"><div class="empty-icon">📭</div>
-      <div class="empty-text">${lang==='ja'?'この日の配信予定はありません':'No streams scheduled for this day'}</div></div>`;
+  // live.json（配信中）と schedule.json（予定）をマージ
+  const liveItems  = LIVE.map(l => ({...l, isLive:true, datetime: l.startedAt}));
+  const schedItems = SCHEDULE.filter(s => !LIVE.some(l => l.memberId === s.memberId && l.platform === s.platform));
+  const all = [...liveItems, ...schedItems];
+
+  const items = all.filter(s => {
+    const dt = new Date(s.datetime);
+    return dt.getFullYear() === tgt.getFullYear()
+        && dt.getMonth()    === tgt.getMonth()
+        && dt.getDate()     === tgt.getDate()
+        && (!filterMem || s.memberId === filterMem);
+  }).sort((a,b) => new Date(a.datetime) - new Date(b.datetime));
+
+  const list = document.getElementById('scheduleList');
+
+  if (!items.length) {
+    list.innerHTML = `<div class="empty">
+      <div class="empty-icon">📭</div>
+      <div class="empty-text">${lang==='ja' ? 'この日の配信予定はありません' : 'No streams scheduled'}</div>
+    </div>`;
     return;
   }
-  list.innerHTML=items.map(s=>{
-    const m=MEMBERS.find(x=>x.id===s.memberId); if(!m) return '';
-    const name=lang==='ja'?m.nameJa:m.nameEn;
-    const dt=new Date(s.datetime||s.startedAt);
-    const hh=String(dt.getHours()).padStart(2,'0'), mm=String(dt.getMinutes()).padStart(2,'0');
-    const dur=s.durationMin?`${Math.floor(s.durationMin/60)}h${s.durationMin%60?s.durationMin%60+'m':''}` :'';
-    const plabel=s.isLive?'LIVE NOW':(s.platform==='youtube'?'YouTube':'Twitch');
-    const bcls=s.isLive?'live-now':s.platform;
-    const url=s.url||(s.platform==='youtube'?`https://www.youtube.com/channel/${m.channelId}`:`https://www.twitch.tv/${m.id}`);
-    const icon=MEMBER_ICONS[m.id]||''; const ini=(m.nameJa||name).slice(0,1);
-    return `<a class="schedule-card ${s.isLive?'is-live':''}" href="${url}" target="_blank" rel="noopener" style="--card-color:${m.color}">
-      <div class="card-avatar">
-        ${icon?`<img src="${icon}" alt="${name}" referrerpolicy="no-referrer" onerror="this.style.display='none';this.parentNode.dataset.fallback='true'">`:`<span>${ini}</span>`}
+
+  list.innerHTML = items.map(s => {
+    const m = MEMBERS.find(x => x.id === s.memberId);
+    if (!m) return '';
+    const name  = lang === 'ja' ? m.ja : m.en;
+    const dt    = new Date(s.datetime);
+    const hh    = String(dt.getHours()).padStart(2,'0');
+    const mm    = String(dt.getMinutes()).padStart(2,'0');
+    const dur   = s.durationMin && s.durationMin > 0
+      ? `${Math.floor(s.durationMin/60)}h${s.durationMin%60 ? s.durationMin%60+'m' : ''}` : '';
+    const plat  = s.isLive ? 'LIVE' : (s.platform === 'youtube' ? 'YouTube' : 'Twitch');
+    const bcls  = s.isLive ? 'live' : (s.platform === 'youtube' ? 'yt' : 'tw');
+    const url   = s.url || `https://www.youtube.com/channel/${m.ch}`;
+    const icon  = ICONS[m.id];
+    const ini   = m.ja[0];
+    return `<a class="s-card ${s.isLive ? 'is-live' : ''}" href="${url}" target="_blank" rel="noopener"
+        style="--member-color:${m.color}">
+      <div class="s-avatar">
+        ${icon ? `<img src="${icon}" referrerpolicy="no-referrer" onerror="this.style.display='none'">` : ini}
       </div>
-      <div class="card-info">
-        <div class="card-member">${name}<span class="platform-badge ${bcls}">${plabel}</span>${dur?`<span style="font-size:.65rem;color:#9ca3af">⏱${dur}</span>`:''}</div>
-        <div class="card-title">${s.title||'—'}</div>
+      <div class="s-body">
+        <div class="s-top">
+          <span class="s-name">${name}</span>
+          <span class="s-badge ${bcls}">${plat}</span>
+        </div>
+        <div class="s-title">${s.title || '—'}</div>
       </div>
-      <div class="card-time">
-        <div class="time">${hh}:${mm}</div>
-        <div class="date-label">${dt.getMonth()+1}/${dt.getDate()}</div>
+      <div class="s-time">
+        <div class="hm">${hh}:${mm}</div>
+        ${dur ? `<div class="dur">⏱ ${dur}</div>` : ''}
       </div>
     </a>`;
   }).join('');
 }
 
-// ============================================================
-// LIVEバナー
-// ============================================================
-function renderLiveBanner(){
-  const banner=document.getElementById('liveBanner');
-  if(!LIVE.length){banner.style.display='none';return;}
-  banner.style.display='flex';
-  document.getElementById('liveItems').innerHTML=LIVE.map(l=>{
-    const m=MEMBERS.find(x=>x.id===l.memberId); if(!m) return '';
-    const name=lang==='ja'?m.nameJa:m.nameEn;
-    return `<a class="live-item" href="${l.url}" target="_blank" rel="noopener">
-      <span>🔴</span><span>${name}</span>
-    </a>`;
-  }).join('');
+// ─────────────────────────────────────────────
+// ユーティリティ
+// ─────────────────────────────────────────────
+function fmtNow() {
+  const n = new Date();
+  return `更新 ${n.getMonth()+1}/${n.getDate()} ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;
 }
+function scrollToTop() { window.scrollTo({top:0, behavior:'smooth'}); }
 
-// ============================================================
-// 統計：メンバータブ
-// ============================================================
-function renderStatsMemberTabs(){
-  const el=document.getElementById('statsMemberTabs');
-  el.innerHTML=`<button class="smt-btn ${!statsMemberId?'active':''}" onclick="selectStatsMember(null)">
-    <span style="font-size:.9rem">📊</span>${lang==='ja'?'全体':'All'}
-  </button>`
-  + MEMBERS.map(m=>{
-    const name=lang==='ja'?m.nameJa:m.nameEn;
-    const icon=MEMBER_ICONS[m.id]||''; const ini=m.nameJa.slice(0,1);
-    return `<button class="smt-btn ${statsMemberId===m.id?'active':''}" onclick="selectStatsMember('${m.id}')" style="${statsMemberId===m.id?`background:${m.color};border-color:${m.color};`:''}">
-      <div class="smt-avatar">
-        ${icon?`<img src="${icon}" alt="${name}" referrerpolicy="no-referrer" onerror="this.style.display='none';this.parentNode.dataset.fallback='true'">`:`<span>${ini}</span>`}
-      </div>${name}
-    </button>`;
-  }).join('');
-}
-
-function selectStatsMember(id){
-  statsMemberId=id;
-  const panel=document.getElementById('memberDetailPanel');
-  const selBtn=document.getElementById('selectedSubBtn');
-  if(id){
-    panel.classList.add('open');
-    if(selBtn) selBtn.style.display='';
-    renderMemberDetailPanel(id);
-  } else {
-    panel.classList.remove('open');
-    if(selBtn) selBtn.style.display='none';
-  }
-  renderStatsMemberTabs();
-  renderStats();
-  renderSubChart();
-}
-
-// ============================================================
-// 月間統計
-// ============================================================
-function changeMonth(delta){
-  statsMonth+=delta;
-  if(statsMonth>11){statsMonth=0;statsYear++;}
-  if(statsMonth<0){statsMonth=11;statsYear--;}
-  renderStats();
-  renderMonthlyChart();
-  if(statsMemberId) renderMemberDetailPanel(statsMemberId);
-}
-
-function getStreamsForMonth(year,month,memberId){
-  const key=`${year}-${String(month+1).padStart(2,'0')}`;
-  const daysInMonth=new Date(year,month+1,0).getDate();
-  let streams=[];
-
-  if(STATS[key]){
-    const src=memberId?{[memberId]:STATS[key][memberId]}:STATS[key];
-    Object.entries(src||{}).forEach(([mid,data])=>{
-      if(!data) return;
-      if(Array.isArray(data.streams)&&data.streams.length>0){
-        // 詳細streams配列あり（新フォーマット）
-        data.streams.forEach(s=>{
-          streams.push({memberId:mid,durationMin:s.durationMin||0,platform:s.platform||'youtube',day:s.day||1});
-        });
-      } else {
-        // 旧フォーマット互換：count/totalMinsから復元
-        const avgMin=Math.round((data.totalMins||0)/Math.max(data.count||1,1));
-        const plat=(data.youtubeMins||0)>=(data.twitchMins||0)?'youtube':'twitch';
-        for(let i=0;i<(data.count||0);i++){
-          streams.push({memberId:mid,durationMin:avgMin,platform:plat,day:Math.min(i+1,daysInMonth)});
-        }
-      }
-    });
-  }
-
-  // stats.jsonにデータがない場合、SCHEDULEから当月の過去分を補完
-  if(streams.length===0){
-    const now=new Date();
-    streams=SCHEDULE.filter(s=>{
-      const dt=new Date(s.datetime);
-      return dt.getFullYear()===year&&dt.getMonth()===month
-        &&dt<=now&&(!memberId||s.memberId===memberId);
-    }).map(s=>({
-      memberId:s.memberId,
-      durationMin:s.durationMin||0,
-      platform:s.platform||'youtube',
-      day:new Date(s.datetime).getDate()
-    }));
-  }
-  return streams;
-}
-
-function renderStats(){
-  const mn_ja=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
-  const mn_en=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  document.getElementById('monthLabel').textContent=
-    lang==='ja'?`${statsYear}年 ${mn_ja[statsMonth]}`:`${mn_en[statsMonth]} ${statsYear}`;
-
-  const streams=getStreamsForMonth(statsYear,statsMonth,statsMemberId||null);
-  const daysInMonth=new Date(statsYear,statsMonth+1,0).getDate();
-  const totalCount=streams.length;
-  const totalMins=streams.reduce((s,x)=>s+(x.durationMin||0),0);
-  const avgMins=totalCount?Math.round(totalMins/totalCount):0;
-  const activeDays=new Set(streams.map(s=>s.day)).size;
-
-  function setText(id,val,sub){
-    const el=document.getElementById(id); if(el) el.textContent=val;
-    const es=document.getElementById(id+'-sub'); if(es) es.textContent=sub;
-  }
-  setText('stat-count',totalCount,lang==='ja'?'回':'streams');
-  setText('stat-hours',(totalMins/60).toFixed(1),lang==='ja'?'時間':'hours');
-  setText('stat-avg',`${Math.floor(avgMins/60)}h${avgMins%60}m`,lang==='ja'?'/ 1配信':'/ stream');
-  setText('stat-days',`${activeDays}/${daysInMonth}`,lang==='ja'?'日':'days');
-
-  // ランキング（全体モード時のみ表示）
-  const rankSrc=statsMemberId?[]:MEMBERS;
-  const hoursMap={},countMap={};
-  MEMBERS.forEach(m=>{hoursMap[m.id]=0;countMap[m.id]=0;});
-  streams.forEach(s=>{hoursMap[s.memberId]=(hoursMap[s.memberId]||0)+s.durationMin;countMap[s.memberId]=(countMap[s.memberId]||0)+1;});
-
-  if(!statsMemberId){
-    const byHours=MEMBERS.map(m=>({...m,mins:hoursMap[m.id]||0,count:countMap[m.id]||0})).sort((a,b)=>b.mins-a.mins);
-    const maxMins=byHours[0]?.mins||1;
-    const maxCount=Math.max(...MEMBERS.map(m=>countMap[m.id]||0))||1;
-    const rankCls=['gold','silver','bronze'];
-    const icon=id=>MEMBER_ICONS[id]||'';
-
-    document.getElementById('rankHours').innerHTML=byHours.map((m,i)=>{
-      const h=Math.floor(m.mins/60),mn=m.mins%60;
-      return `<div class="rank-row">
-        <div class="rank-num ${rankCls[i]||''}">${i+1}</div>
-        <div class="rank-avatar">${icon(m.id)?`<img src="${icon(m.id)}" referrerpolicy="no-referrer" onerror="this.style.display='none';this.parentNode.dataset.fallback='true'">`:`<span>${m.nameJa.slice(0,1)}</span>`}</div>
-        <div class="rank-name">${lang==='ja'?m.nameJa:m.nameEn}</div>
-        <div class="rank-bar-wrap"><div class="rank-bar-bg">
-          <div class="rank-bar-fill" style="width:${(m.mins/maxMins*100).toFixed(1)}%;--bar-color:${m.color}"></div>
-        </div></div>
-        <div class="rank-value">${h}h${mn}m</div>
-      </div>`;
-    }).join('');
-
-    document.getElementById('rankCount').innerHTML=[...byHours].sort((a,b)=>b.count-a.count).map((m,i)=>`
-      <div class="rank-row">
-        <div class="rank-num ${rankCls[i]||''}">${i+1}</div>
-        <div class="rank-avatar">${icon(m.id)?`<img src="${icon(m.id)}" referrerpolicy="no-referrer" onerror="this.style.display='none';this.parentNode.dataset.fallback='true'">`:`<span>${m.nameJa.slice(0,1)}</span>`}</div>
-        <div class="rank-name">${lang==='ja'?m.nameJa:m.nameEn}</div>
-        <div class="rank-bar-wrap"><div class="rank-bar-bg">
-          <div class="rank-bar-fill" style="width:${(m.count/maxCount*100).toFixed(1)}%;--bar-color:${m.color}"></div>
-        </div></div>
-        <div class="rank-value">${m.count}${lang==='ja'?'回':'x'}</div>
-      </div>`).join('');
-  } else {
-    document.getElementById('rankHours').innerHTML=`<div style="padding:12px;font-size:.8rem;color:var(--muted2);text-align:center">${lang==='ja'?'メンバー個別の詳細はパネルを参照':'See member detail panel above'}</div>`;
-    document.getElementById('rankCount').innerHTML='';
-  }
-
-  // ヒートマップ
-  const dayCounts={};
-  streams.forEach(s=>{dayCounts[s.day]=(dayCounts[s.day]||0)+1;});
-  const firstDay=new Date(statsYear,statsMonth,1).getDay();
-  const isThisMonth=statsYear===today.getFullYear()&&statsMonth===today.getMonth();
-  const wd=lang==='ja'?WD_JA:['Su','Mo','Tu','We','Th','Fr','Sa'];
-  let html=wd.map(w=>`<div class="heatmap-day-label">${w}</div>`).join('');
-  for(let i=0;i<firstDay;i++) html+=`<div class="heatmap-cell empty-cell"></div>`;
-  for(let d=1;d<=daysInMonth;d++){
-    const cnt=dayCounts[d]||0;
-    const level=cnt===0?0:cnt<=1?1:cnt<=3?2:cnt<=6?3:4;
-    html+=`<div class="heatmap-cell ${isThisMonth&&d===today.getDate()?'today-cell':''}" data-level="${level}" title="${d}日: ${cnt}件">${d}</div>`;
-  }
-  document.getElementById('heatmapGrid').innerHTML=html;
-
-  // プラットフォーム
-  const ytCnt=streams.filter(s=>s.platform==='youtube').length;
-  const twCnt=streams.filter(s=>s.platform==='twitch').length;
-  const tot=ytCnt+twCnt||1;
-  document.getElementById('platformBars').innerHTML=`
-    <div class="platform-row">
-      <div class="platform-row-header"><div class="platform-name" style="color:var(--yt)">▶ YouTube</div><div class="platform-pct">${ytCnt}${lang==='ja'?'件':'streams'} (${(ytCnt/tot*100).toFixed(0)}%)</div></div>
-      <div class="platform-full-bar"><div class="platform-full-fill" style="width:${(ytCnt/tot*100).toFixed(0)}%;background:var(--yt)"></div></div>
-    </div>
-    <div class="platform-row">
-      <div class="platform-row-header"><div class="platform-name" style="color:var(--twitch)">🟣 Twitch</div><div class="platform-pct">${twCnt}${lang==='ja'?'件':'streams'} (${(twCnt/tot*100).toFixed(0)}%)</div></div>
-      <div class="platform-full-bar"><div class="platform-full-fill" style="width:${(twCnt/tot*100).toFixed(0)}%;background:var(--twitch)"></div></div>
-    </div>`;
-}
-
-// ============================================================
-// メンバー個別パネル
-// ============================================================
-function renderMemberDetailPanel(memberId){
-  const m=MEMBERS.find(x=>x.id===memberId); if(!m) return;
-  const name=lang==='ja'?m.nameJa:m.nameEn;
-  const icon=MEMBER_ICONS[m.id]||'';
-  const ini=m.nameJa.slice(0,1);
-
-  const avEl=document.getElementById('mdpAvatar');
-  avEl.style.setProperty('--member-color',m.color);
-  avEl.innerHTML=icon?`<img src="${icon}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" referrerpolicy="no-referrer" onerror="this.style.display='none';this.parentNode.dataset.fallback='true'">`:`<span style="font-size:1.4rem;font-weight:900;color:${m.color}">${ini}</span>`;
-
-  document.getElementById('mdpName').textContent=m.nameJa;
-  document.getElementById('mdpEn').textContent=m.nameEn;
-
-  const streams=getStreamsForMonth(statsYear,statsMonth,memberId);
-  const totalMins=streams.reduce((s,x)=>s+(x.durationMin||0),0);
-  const avgMins=streams.length?Math.round(totalMins/streams.length):0;
-
-  document.getElementById('mdpCount').textContent=streams.length;
-  document.getElementById('mdpCount').style.color=m.color;
-  document.getElementById('mdpHours').textContent=(totalMins/60).toFixed(1)+'h';
-  document.getElementById('mdpHours').style.color=m.color;
-  document.getElementById('mdpAvg').textContent=`${Math.floor(avgMins/60)}h${avgMins%60}m`;
-  document.getElementById('mdpAvg').style.color=m.color;
-
-  // 日別バーチャート
-  const daysInMonth=new Date(statsYear,statsMonth+1,0).getDate();
-  const dayMins=Array(daysInMonth).fill(0);
-  streams.forEach(s=>{ if(s.day>=1&&s.day<=daysInMonth) dayMins[s.day-1]+=s.durationMin||0; });
-
-  if(mdpChartInst) mdpChartInst.destroy();
-  const ctx=document.getElementById('mdpChart').getContext('2d');
-  mdpChartInst=new Chart(ctx,{
-    type:'bar',
-    data:{
-      labels:Array.from({length:daysInMonth},(_,i)=>i+1),
-      datasets:[{
-        label:lang==='ja'?'配信時間(分)':'Stream mins',
-        data:dayMins,
-        backgroundColor:m.color+'99',
-        borderColor:m.color,
-        borderWidth:1,
-        borderRadius:3,
-      }]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{display:false} },
-      scales:{
-        x:{ticks:{font:{size:9},maxRotation:0,color:'#6b7280'},grid:{display:false}},
-        y:{ticks:{font:{size:9},color:'#6b7280',callback:v=>`${Math.floor(v/60)}h`},grid:{color:'#f3f4f6'}}
-      }
-    }
-  });
-}
-
-// ============================================================
-// チャンネル登録者グラフ
-// ============================================================
-function setSubChartMode(mode,btn){
-  subChartMode=mode;
-  document.querySelectorAll('.sct-btn').forEach(b=>b.classList.toggle('active',b===btn));
-  renderSubChart();
-}
-
-function renderSubChart(){
-  if(subChartInst){ subChartInst.destroy(); subChartInst=null; }
-  const canvas=document.getElementById('subChart'); if(!canvas) return;
-  const ctx=canvas.getContext('2d');
-
-  // データ準備
-  let targetMembers=[];
-  if(subChartMode==='selected'&&statsMemberId){
-    targetMembers=[MEMBERS.find(m=>m.id===statsMemberId)].filter(Boolean);
-  } else {
-    // 最新月の登録者数でTop10
-    const withSubs=MEMBERS.map(m=>{
-      const hist=SUBSCRIBER_DATA[m.id]||[];
-      const latest=hist[hist.length-1]?.count||0;
-      return {...m,latest};
-    }).sort((a,b)=>b.latest-a.latest).slice(0,10);
-    targetMembers=withSubs;
-  }
-
-  // 共通のラベル（日付）
-  const allDates=new Set();
-  targetMembers.forEach(m=>{ (SUBSCRIBER_DATA[m.id]||[]).forEach(p=>allDates.add(p.date)); });
-  const labels=[...allDates].sort();
-  const shortLabels=labels.map(d=>{ const [y,mo]=d.split('-'); return `${y.slice(2)}/${mo}`; });
-
-  const datasets=targetMembers.map(m=>{
-    const hist=SUBSCRIBER_DATA[m.id]||[];
-    const histMap=Object.fromEntries(hist.map(p=>[p.date,p.count]));
-    return {
-      label:lang==='ja'?m.nameJa:m.nameEn,
-      data:labels.map(d=>histMap[d]||null),
-      borderColor:m.color,
-      backgroundColor:'transparent',
-      borderWidth:2,
-      pointRadius:2,
-      pointHoverRadius:5,
-      tension:.35,
-      spanGaps:true,
-    };
-  });
-
-  subChartInst=new Chart(ctx,{
-    type:'line',
-    data:{labels:shortLabels,datasets},
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      interaction:{mode:'index',intersect:false},
-      plugins:{
-        legend:{
-          position:'bottom',
-          labels:{font:{size:10},usePointStyle:true,padding:10,
-            filter:item=>item.datasetIndex<(subChartMode==='top10'?5:targetMembers.length)}
-        }
-      },
-      scales:{
-        x:{ticks:{font:{size:9},maxRotation:45,color:'#6b7280'},grid:{color:'#f3f4f6'}},
-        y:{ticks:{font:{size:9},color:'#6b7280',callback:v=>v>=10000?`${(v/10000).toFixed(0)}万`:(v>=1000?`${(v/1000).toFixed(0)}k`:v)},grid:{color:'#f3f4f6'}}
-      }
-    }
-  });
-}
-
-// ============================================================
-// 月別推移チャート（過去12ヶ月）
-// ============================================================
-function renderMonthlyChart(){
-  if(monthlyChartInst){ monthlyChartInst.destroy(); monthlyChartInst=null; }
-  const canvas=document.getElementById('monthlyChart'); if(!canvas) return;
-  const ctx=canvas.getContext('2d');
-
-  const months=[]; const labels=[];
-  for(let i=11;i>=0;i--){
-    const d=new Date(today.getFullYear(),today.getMonth()-i,1);
-    months.push({year:d.getFullYear(),month:d.getMonth()});
-    labels.push(lang==='ja'?`${d.getMonth()+1}月`:`${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]}`);
-  }
-
-  const membersToShow=statsMemberId?[MEMBERS.find(m=>m.id===statsMemberId)].filter(Boolean):[];
-
-  if(membersToShow.length===0){
-    // 全体集計
-    const counts=months.map(({year,month})=>getStreamsForMonth(year,month,null).length);
-    monthlyChartInst=new Chart(ctx,{
-      type:'bar',
-      data:{labels,datasets:[{
-        label:lang==='ja'?'配信回数':'Streams',
-        data:counts,
-        backgroundColor:'#7c3aed55',
-        borderColor:'#7c3aed',
-        borderWidth:1.5,
-        borderRadius:4,
-      }]},
-      options:{
-        responsive:true, maintainAspectRatio:false,
-        plugins:{legend:{display:false}},
-        scales:{
-          x:{ticks:{font:{size:10},color:'#6b7280'},grid:{display:false}},
-          y:{ticks:{font:{size:10},color:'#6b7280'},grid:{color:'#f3f4f6'},beginAtZero:true}
-        }
-      }
-    });
-  } else {
-    const m=membersToShow[0];
-    const counts=months.map(({year,month})=>getStreamsForMonth(year,month,m.id).length);
-    const hours=months.map(({year,month})=>parseFloat((getStreamsForMonth(year,month,m.id).reduce((s,x)=>s+(x.durationMin||0),0)/60).toFixed(1)));
-    monthlyChartInst=new Chart(ctx,{
-      type:'bar',
-      data:{labels,datasets:[
-        {label:lang==='ja'?'配信回数':'Streams',data:counts,backgroundColor:m.color+'55',borderColor:m.color,borderWidth:1.5,borderRadius:4,yAxisID:'y'},
-        {label:lang==='ja'?'時間(h)':'Hours',data:hours,type:'line',borderColor:m.color,backgroundColor:'transparent',borderWidth:2,pointRadius:3,tension:.35,yAxisID:'y1'},
-      ]},
-      options:{
-        responsive:true, maintainAspectRatio:false,
-        plugins:{legend:{position:'bottom',labels:{font:{size:10},usePointStyle:true,padding:10}}},
-        scales:{
-          x:{ticks:{font:{size:10},color:'#6b7280'},grid:{display:false}},
-          y:{ticks:{font:{size:10},color:'#6b7280'},grid:{color:'#f3f4f6'},beginAtZero:true},
-          y1:{position:'right',ticks:{font:{size:10},color:m.color},grid:{display:false},beginAtZero:true},
-        }
-      }
-    });
-  }
-}
-
-// ============================================================
-// 更新時刻
-// ============================================================
-function updateTime(){
-  const now=new Date();
-  document.getElementById('updateTime').textContent=
-    `最終更新：${now.getMonth()+1}/${now.getDate()} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-}
-
-// 起動
 init();
 </script>
 </body>
