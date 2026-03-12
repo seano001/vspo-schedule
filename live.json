@@ -1,15 +1,5 @@
 [
   {
-    "memberId": "ramune",
-    "memberName": "白波らむね",
-    "title": "SHOWDOWN練習 22時～ スクリム #VSPO_SHOWDOWN_2026",
-    "platform": "twitch",
-    "url": "https://twitch.tv/ramuneshiranami",
-    "startedAt": "2026-03-12T11:11:53Z",
-    "isLive": true,
-    "viewers": 1976
-  },
-  {
     "memberId": "akari",
     "memberName": "夢野あかり",
     "title": "よく寝てよくランクする",
@@ -17,6 +7,6 @@
     "url": "https://twitch.tv/akarindao",
     "startedAt": "2026-03-12T15:02:26Z",
     "isLive": true,
-    "viewers": 2729
+    "viewers": 2910
   }
 ]
