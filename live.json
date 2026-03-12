@@ -1,5 +1,15 @@
 [
   {
+    "memberId": "ren",
+    "memberName": "如月れん",
+    "title": "showdown練習配信Day3！！w/KEI.Bさん",
+    "platform": "twitch",
+    "url": "https://twitch.tv/ren_kisaragi__",
+    "startedAt": "2026-03-12T11:57:02Z",
+    "isLive": true,
+    "viewers": 520
+  },
+  {
     "memberId": "ramune",
     "memberName": "白波らむね",
     "title": "SHOWDOWN練習 22時～ スクリム #VSPO_SHOWDOWN_2026",
@@ -7,7 +17,7 @@
     "url": "https://twitch.tv/ramuneshiranami",
     "startedAt": "2026-03-12T11:11:53Z",
     "isLive": true,
-    "viewers": 1372
+    "viewers": 1433
   },
   {
     "memberId": "yuuhi",
@@ -17,6 +27,6 @@
     "url": "https://twitch.tv/sendo_yuuhi",
     "startedAt": "2026-03-12T06:38:20Z",
     "isLive": true,
-    "viewers": 3265
+    "viewers": 3356
   }
 ]
