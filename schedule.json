@@ -1,29 +1,192 @@
 [
   {
+    "memberId": "sumire",
     "memberName": "花芽すみれ",
-    "memberImg": "",
-    "title": "サンプル配信",
-    "date": "2026/03/12",
-    "time": "21:00"
+    "title": "フリチャ👾💤",
+    "datetime": "2020-04-03T02:23:19Z",
+    "platform": "youtube",
+    "url": "https://www.youtube.com/watch?v=sKJ5moF3X8Y",
+    "isLive": false,
+    "durationMin": 0
+  },
+  {
+    "memberId": "uruha",
+    "memberName": "一ノ瀬うるは",
+    "title": "ぽたく集会所",
+    "datetime": "2020-05-19T08:02:11Z",
+    "platform": "youtube",
+    "url": "https://www.youtube.com/watch?v=lSvLABLEhO0",
+    "isLive": false,
+    "durationMin": 0
+  },
+  {
+    "memberId": "noah",
+    "memberName": "胡桃のあ",
+    "title": "Free Chat",
+    "datetime": "2020-06-23T15:45:01Z",
+    "platform": "youtube",
+    "url": "https://www.youtube.com/watch?v=bx1-cTN0Zas",
+    "isLive": false,
+    "durationMin": 0
+  },
+  {
+    "memberId": "sena",
+    "memberName": "空澄セナ",
+    "title": "- フリフリチャット -",
+    "datetime": "2020-07-23T08:08:12Z",
+    "platform": "youtube",
+    "url": "https://www.youtube.com/watch?v=JkuHbeoqu64",
+    "isLive": false,
+    "durationMin": 0
+  },
+  {
+    "memberId": "toto",
+    "memberName": "夢野あかり",
+    "title": "▷ Free chat",
+    "datetime": "2020-07-23T10:32:36Z",
+    "platform": "youtube",
+    "url": "https://www.youtube.com/watch?v=RasCgfRnTOc",
+    "isLive": false,
+    "durationMin": 0
+  },
+  {
+    "memberId": "lisa",
+    "memberName": "英リサ",
+    "title": "【英リサ】free chatだよん",
+    "datetime": "2020-08-16T12:55:21Z",
+    "platform": "youtube",
+    "url": "https://www.youtube.com/watch?v=uZduRVQgZgo",
+    "isLive": false,
+    "durationMin": 0
+  },
+  {
+    "memberId": "hinano",
+    "memberName": "橘ひなの",
+    "title": "✧୨୧ Free Chat ୨୧✧",
+    "datetime": "2020-08-17T14:21:27Z",
+    "platform": "youtube",
+    "url": "https://www.youtube.com/watch?v=CIRvsQ7XMoM",
+    "isLive": false,
+    "durationMin": 0
+  },
+  {
+    "memberId": "runa",
+    "memberName": "空星きらめ",
+    "title": "🌙FreeしのみんChat🐾",
+    "datetime": "2021-12-28T01:29:15Z",
+    "platform": "youtube",
+    "url": "https://www.youtube.com/watch?v=Rfuu2gkj18w",
+    "isLive": false,
+    "durationMin": 0
+  },
+  {
+    "memberId": "tuna",
+    "memberName": "猫汰つな",
+    "title": "フリーチャット🍒✨",
+    "datetime": "2022-08-11T10:36:25Z",
+    "platform": "youtube",
+    "url": "https://www.youtube.com/watch?v=HC8rMmTWBGk",
+    "isLive": false,
+    "durationMin": 0
+  },
+  {
+    "memberId": "meto",
+    "memberName": "音霊魂子",
+    "title": "🪐🪐🪐",
+    "datetime": "2022-09-24T12:10:43Z",
+    "platform": "youtube",
+    "url": "https://www.youtube.com/watch?v=tFFq_vUblrs",
+    "isLive": false,
+    "durationMin": 0
+  },
+  {
+    "memberId": "ramune",
+    "memberName": "白波らむね",
+    "title": "FREE CHAT💙【白波らむね/ぶいすぽ】",
+    "datetime": "2022-10-09T09:06:22Z",
+    "platform": "youtube",
+    "url": "https://www.youtube.com/watch?v=l4_7qk5VE50",
+    "isLive": false,
+    "durationMin": 0
+  },
+  {
+    "memberId": "kokage",
+    "memberName": "紡木こかげ",
+    "title": "フリーチャット",
+    "datetime": "2024-04-13T20:03:59Z",
+    "platform": "youtube",
+    "url": "https://www.youtube.com/watch?v=CTFmzc2g4LU",
+    "isLive": false,
+    "durationMin": 0
+  },
+  {
+    "memberId": "beni",
+    "memberName": "八雲べに",
+    "title": "💄Free chat",
+    "datetime": "2024-09-24T16:38:07Z",
+    "platform": "youtube",
+    "url": "https://www.youtube.com/watch?v=4RgoOHvpzsA",
+    "isLive": false,
+    "durationMin": 0
+  },
+  {
+    "memberId": "hanabi",
+    "memberName": "花火しまこ",
+    "title": "かやく庫（フリーチャット）",
+    "datetime": "2024-12-31T10:53:09Z",
+    "platform": "youtube",
+    "url": "https://www.youtube.com/watch?v=PYifZFKwxTA",
+    "isLive": false,
+    "durationMin": 0
+  },
+  {
+    "memberId": "hanabi",
+    "memberName": "花火しまこ",
+    "title": "🦋週間スケジュール🦋",
+    "datetime": "2025-09-29T12:24:52Z",
+    "platform": "youtube",
+    "url": "https://www.youtube.com/watch?v=GfvgsDNe57E",
+    "isLive": false,
+    "durationMin": 0
+  },
+  {
+    "memberId": "sena",
+    "memberName": "空澄セナ",
+    "title": "【 アークナイツ：エンドフィールド 】チルな工場長。武陵を進める。【空澄セナ/ぶいすぽっ！】",
+    "datetime": "2026-03-10T15:44:05Z",
+    "platform": "youtube",
+    "url": "https://www.youtube.com/watch?v=HI120JZ9jyc",
+    "isLive": false,
+    "durationMin": 0
+  },
+  {
+    "memberId": "kuromu",
+    "memberName": "夜乃くろむ",
+    "title": "〖 VALORANT 〗チム練5日目、SHOWDOWNへ向けて。の巻〖 ぶいすぽっ！ / 夜乃くろむ 〗",
+    "datetime": "2026-03-11T13:59:12Z",
+    "platform": "youtube",
+    "url": "https://www.youtube.com/watch?v=KKkP4q9sg8Y",
+    "isLive": false,
+    "durationMin": 0
+  },
+  {
+    "memberId": "sumire",
+    "memberName": "花芽すみれ",
+    "title": "【LOL】ライバルチームとスクリムするぞ【ぶいすぽっ！/花芽すみれ】",
+    "datetime": "2026-03-11T18:52:01Z",
+    "platform": "youtube",
+    "url": "https://www.youtube.com/watch?v=0wC-LYGPkLc",
+    "isLive": false,
+    "durationMin": 0
+  },
+  {
+    "memberId": "tuna",
+    "memberName": "猫汰つな",
+    "title": "【League of Legends】チーム練→22時から本番相手とスクリム【ぶいすぽ / 猫汰つな】",
+    "datetime": "2026-03-12T03:26:52Z",
+    "platform": "youtube",
+    "url": "https://www.youtube.com/watch?v=jCM9jQ6-zoU",
+    "isLive": false,
+    "durationMin": 0
   }
 ]
-```
-
----
-
-# STEP 3：Make でTwitter自動連携
-
-### 3-1. Twitter API申請
-1. [developer.twitter.com](https://developer.twitter.com) にアクセス
-2. 「Developer Portal」→ アプリ作成
-3. **Basicプラン（月$100）** に加入
-4. `Bearer Token` を取得・メモ
-
-### 3-2. Makeのシナリオ作成
-Make（[make.com](https://make.com)）で以下のフローを作ります：
-```
-[Twitter] ツイート取得
-    ↓
-[Tools] JSON整形（日時・タイトル抽出）
-    ↓
-[GitHub] schedule.jsonを更新
