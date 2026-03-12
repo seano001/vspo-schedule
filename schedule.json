@@ -1,0 +1,29 @@
+[
+  {
+    "memberName": "花芽すみれ",
+    "memberImg": "",
+    "title": "サンプル配信",
+    "date": "2026/03/12",
+    "time": "21:00"
+  }
+]
+```
+
+---
+
+# STEP 3：Make でTwitter自動連携
+
+### 3-1. Twitter API申請
+1. [developer.twitter.com](https://developer.twitter.com) にアクセス
+2. 「Developer Portal」→ アプリ作成
+3. **Basicプラン（月$100）** に加入
+4. `Bearer Token` を取得・メモ
+
+### 3-2. Makeのシナリオ作成
+Make（[make.com](https://make.com)）で以下のフローを作ります：
+```
+[Twitter] ツイート取得
+    ↓
+[Tools] JSON整形（日時・タイトル抽出）
+    ↓
+[GitHub] schedule.jsonを更新
