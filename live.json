@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "memberId": "akari",
+    "memberName": "夢野あかり",
+    "title": "よく寝てよくランクする",
+    "platform": "twitch",
+    "url": "https://twitch.tv/akarindao",
+    "startedAt": "2026-03-12T15:02:26Z",
+    "isLive": true,
+    "viewers": 3776
+  }
+]
