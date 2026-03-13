@@ -1,15 +1,5 @@
 [
   {
-    "memberId": "ren",
-    "memberName": "如月れん",
-    "title": "Cキャミィ募集【PASS:5555】",
-    "platform": "twitch",
-    "url": "https://twitch.tv/ren_kisaragi__",
-    "startedAt": "2026-03-13T12:52:50Z",
-    "isLive": true,
-    "viewers": 2145
-  },
-  {
     "memberId": "ramune",
     "memberName": "白波らむね",
     "title": "SHOWDOWN自主練 #VSPO_SHOWDOWN_2026",
@@ -17,6 +7,6 @@
     "url": "https://twitch.tv/ramuneshiranami",
     "startedAt": "2026-03-13T13:12:28Z",
     "isLive": true,
-    "viewers": 2268
+    "viewers": 2324
   }
 ]
