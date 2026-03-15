@@ -1,5 +1,15 @@
 [
   {
+    "memberId": "ramune",
+    "memberName": "白波らむね",
+    "title": "SHOWDOWN非公式練習 #VSPO_SHOWDOWN_2026",
+    "platform": "twitch",
+    "url": "https://twitch.tv/ramuneshiranami",
+    "startedAt": "2026-03-15T11:49:58Z",
+    "isLive": true,
+    "viewers": 369
+  },
+  {
     "memberId": "akari",
     "memberName": "夢野あかり",
     "title": "ショウダウン練習だ！！",
@@ -7,6 +17,6 @@
     "url": "https://twitch.tv/akarindao",
     "startedAt": "2026-03-15T11:09:57Z",
     "isLive": true,
-    "viewers": 1795
+    "viewers": 1756
   }
 ]
